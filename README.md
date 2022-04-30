@@ -1,7 +1,7 @@
 
 # target-causalclaims
 
-Code associated with Garrison & Colleagues (2021) Causal Claims Paper.
+Code associated with Garrison & Colleagues (2022) Causal Claims Paper.
 
 # Running analyses
 
