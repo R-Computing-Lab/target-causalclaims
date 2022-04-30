@@ -1,0 +1,50 @@
+---
+title: "Causal Claims Tables"
+author: "Jonathan Trattner"
+date: "3/16/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+flextable::set_flextable_defaults(
+  fonts_ignore = TRUE
+  )
+targets::tar_read(results_consc_depression)
+targets::tar_read(results_consc_depression_income)
+targets::tar_read(results_neuroticism)
+targets::tar_read(results_phys_consc)
+targets::tar_read(summary_stats_table)
+```
+
+# Summary Statistics Table
+
+```{r, message = FALSE}
+summary_stats_table
+```
+
+
+## Does Conscientiousness Causally Influence Physical Health (At Age 50)?
+
+```{r, message = FALSE}
+results_phys_consc
+```
+
+## Does Conscientiousness Causally Influence Mental Health (Depression)?
+
+```{r, message = FALSE}
+results_consc_depression
+```
+
+## Does Conscientiousness Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
+
+```{r, message = FALSE}
+results_consc_depression_income
+```
+
+## Does Neuroticism Causally Influence Mental Health (Depression)?
+
+```{r, message = FALSE}
+results_neuroticism
+```
+
