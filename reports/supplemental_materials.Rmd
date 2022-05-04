@@ -156,8 +156,8 @@ neuroticism_fit %>%
  tbl_regression() %>%
     add_glance_source_note() %>%
     modify_header(
-      statistic ~ "**T-Statistic**", 
-      p.value ~ "**P-Value**"
+      statistic ~ "**t-statistic**", 
+      p.value ~ "**p-value**"
       )
 
 ```
