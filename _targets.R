@@ -25,7 +25,11 @@ initial_read_process <- list(
   tar_map(
     tar_target(
       raw,
-      read_nlsy_data(here(data_path))
+      recode_demographics(
+        read_nlsy_data(
+          here(data_path)
+        )
+      )
     ),
     tar_target(
       processed,

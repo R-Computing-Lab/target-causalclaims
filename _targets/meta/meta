@@ -1,30 +1,6 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|iteration|parent|children|seconds|warnings|error
-raw_consc_depression|stem|d793f86137cee82b|93352638a3f1d952|34b0ff6e7978d3bd|9200120||t19067.5943715322s|7ae0ad185f45e0d7|72822|rds|vector|||0.633||
-raw_phys_consc|stem|bf69cf5e94f75b76|e417adca16da70f1|34b0ff6e7978d3bd|2080432509||t19067.5943723273s|f0744312363b1d75|103723|rds|vector|||0.032||
-raw_neuroticism|stem|6113485f41e6fe8a|bff8b0c326c46b50|34b0ff6e7978d3bd|-1593698842||t19067.5943741594s|3a37811cfe4440f1|267330|rds|vector|||0.047||
-raw_income_grade|stem|85404de8185e54d2|033e1cce0b090e84|34b0ff6e7978d3bd|737572088||t19067.5943752766s|7931772b2f95c362|270457|rds|vector|||0.029||
-processed_consc_depression|stem|38f58a3e85b3cd7a|e2bdbe8d9e67bab0|292e019ab8a1eab5|1111851092||t19067.5943755698s|da9a869b29f7b747|47656|rds|vector|||0.01||
-processed_phys_consc|stem|7ecbde26f0b4d9f5|4fdaed3b44a14824|9ba3775d04b3c45f|2106948878||t19067.5943758388s|7c1147e1df32169c|93115|rds|vector|||0.007||
-processed_neuroticism|stem|f28d639b4880ed77|a946f0bb1cb29fca|5416fb2819170f88|260897071||t19067.5943760743s|977a9647707e52e8|49330|rds|vector|||0.005||
-processed_income_grade|stem|b2919021dd04cb98|36cbf38e7fcb8b66|ea189d5da4475687|-770200007||t19067.5943770011s|f621a8c1a3f6d9bb|38505|rds|vector|||0.012||
-regression_consc_depression|stem|6a1c307da239efe2|20f08b8b7c4e10fc|09f3bf6f76193e7d|1637059124||t19067.5945541148s|39904497f42f6c19|286394|rds|vector|||1.896||
-regression_phys_consc|stem|d1da8e05f20f382b|7c245f4bf4ad2f01|84e05859d39fa688|1456908061||t19067.5945758734s|dc754d63358ad0f0|415665|rds|vector|||1.855||
-regression_neuroticism|stem|dd00d81765216eb9|6fd3878c694f0113|09fa49bfe3d026bf|1675890591||t19067.5945982352s|b18d7ba639df8d31|295052|rds|vector|||1.906||
-regression_consc_depression_income|stem|6667c6173df3cbe7|99ff883383d38737|c5b2a05f2b9d0044|335591110||t19067.5946418892s|27cb7408cd77ca82|276460|rds|vector|||3.745||
-results_consc_depression|stem|ee4fe06a5e26e999|98476361350398ad|6372798bb0e54b2c|-1933044188||t19067.7477970335s|1c5cc7c788ddb24f|2574808|rds|vector|||0.914||
-results_phys_consc|stem|28ee100fa5c19789|34f516d62e80bdde|74afefc9dcc5d416|-1136564380||t19067.7478024628s|f8bcc3966a8b75f9|3407861|rds|vector|||0.287||
-results_neuroticism|stem|cc4a364053e5da49|2d14bb74a67994dd|214ec327d64c19ab|1071416746||t19067.7478078356s|44a05f05eacfb59d|2649883|rds|vector|||0.284||
-results_consc_depression_income|stem|4ee56b7c366103f1|7fae167369b5f11f|a08be4bd5c46e1f3|-1983912838||t19067.7478129316s|9b24e762983ea7da|1988890|rds|vector|||0.29||
-link_pairs|stem|d0218defd058a16c|99544b9aabdc88b5|620f1cf9cabf8912|173348377||t19107.7168859676s|73f859cb460d059d|65905|rds|vector|||0.57||
-summary_stats_data|stem|134990f31745da26|18297437ae4985dd|779383f98622c2a6|-1276895728||t19107.7172640684s|ff062bfe0c66b71e|534|rds|vector|||0.637||
-processed_consc_depression_income|stem|affc1a99f1d018f8|f25a772c7cccb8a5|649398aa9ba470e6|2014070817||t19107.7186314197s|de828c327dc70054|74818|rds|vector|||0.555|data frame results in filter are deprecated, use if_any or if_all.|
-single_entered_consc_depression_income|stem|cecb1e06b218c113|33a048f146082865|9697a17cf368c341|-2005294878||t19107.7200617838s|90c966ab0066e572|39899|rds|vector|||0.558||
-single_entered_consc_depression|stem|4daea5681e3123d0|f84e8b3fd303f9ca|75f56080e4f1dc1c|1378696908||t19107.7200620462s|89692ebd2d6d300b|24266|rds|vector|||0.016||
-single_entered_neuroticism|stem|5d9c9440303b7258|d79e4a520f26b4be|4298f17eff8e563b|-879700324||t19107.7200622632s|246433e49c2b1f97|24425|rds|vector|||0.013||
-single_entered_phys_consc|stem|4a5e3ca635d880d5|44a7e28c72b8096d|6f207ab5a288c4b3|-958140115||t19107.7200637439s|8a7177fd39538e0e|35900|rds|vector|||0.013||
-summary_stats_table|stem|19f6accd5f85f0fc|7d7f8794d4b0dbce|cec045d6d11a4854|-1354917541||t19107.724502343s|e52f004090a6a23c|6631|rds|vector|||0.633||
 reverse_code|function|f029cea16784c90c||||||||||||||
-initial_read_process|object|49bfffcbe9c20a01||||||||||||||
+initial_read_process|object|96c0594010e4f8a0||||||||||||||
 tables|object|51c0db57dc3ab4ae||||||||||||||
 modeling_values|object|f2a5b1c8d03eb195||||||||||||||
 models|object|e338e36de122ae0a||||||||||||||
@@ -40,9 +16,33 @@ process_neuroticism_data|function|16a619ce0f3e9f97||||||||||||||
 prep_summary_stats_table_data|function|f1c153f72e1fd399||||||||||||||
 make_summary_stats_table|function|8030c06b5cf0ca68||||||||||||||
 process_consc_depression_income_data|function|f5b69942fd335a5a||||||||||||||
-supplemental_materials_pdf|stem|48646749c695536c|37d00c6136e258ef|4745aa592080ea1d|1803437746|output/supplemental_materials.pdf*reports/supplemental_materials.Rmd|t19112.0362401913s|2af8563c6aaf339b|215841|file|vector|||4.88||
-supplemental_materials_html|stem|783d8625fbe6a5e3|935e89b93c968d0b|4745aa592080ea1d|340011991|output/supplemental_materials.html*reports/supplemental_materials.Rmd|t19112.0362798682s|3b3d2ff877dcf893|754491|file|vector|||3.441||
-supplemental_materials_word|stem|7902581e07b5aff2|d87c34a3f03db941|4745aa592080ea1d|-193848955|output/supplemental_materials.docx*reports/supplemental_materials.Rmd|t19112.0363205737s|12b8cb24a1cee868|21749|file|vector|||3.503||
-regression_tables_word|stem|64e53f45efa94678|0d0a9fab67f87642|e9cdafe676b6c970|175906589|output/tables.docx*reports/tables.Rmd|t19112.0363608114s|ffc8c7dc9c577915|18444|file|vector|||3.28||
-regression_tables_html|stem|cef9013fd66a4aca|8deb7c689b1f3d12|e9cdafe676b6c970|-92574164|output/tables.html*reports/tables.Rmd|t19112.036394156s|4da1290c5f686525|802002|file|vector|||2.894||
-regression_tables_pdf|stem|0101b9e401750ebd|f0f079d028a09121|e9cdafe676b6c970|-1986429497|output/tables.pdf*reports/tables.Rmd|t19112.0364201509s|8e7909dfb7be0043|167562|file|vector|||2.229||
+raw_income_grade|stem|634d54dd04fea3b6|46643af06d66baf0|ef38605ea8f3b9c9|737572088||t19112.5629623973s|be421c02772246ad|269627|rds|vector|||0.655||
+link_pairs|stem|d0218defd058a16c|99544b9aabdc88b5|620f1cf9cabf8912|173348377||t19112.5629628961s|73f859cb460d059d|65905|rds|vector|||0.025||
+raw_consc_depression|stem|9fc608e3b2432feb|b5b9ef8d43b3dd84|ef38605ea8f3b9c9|9200120||t19112.5629635385s|bb9ccc70c3af982c|71952|rds|vector|||0.032||
+raw_neuroticism|stem|a3a583212c06a375|e5e1f302d0bcceed|ef38605ea8f3b9c9|-1593698842||t19112.5629654278s|6ed6aaa0adb61a9a|266422|rds|vector|||0.053||
+supplemental_materials_pdf|stem|91a44273bb808e7f|37d00c6136e258ef|4745aa592080ea1d|1803437746|output/supplemental_materials.pdf*reports/supplemental_materials.Rmd|t19112.5630163707s|2af8563c6aaf339b|215841|file|vector|||4.411||
+raw_phys_consc|stem|cb8daf52916493fc|6097421ea72e71af|ef38605ea8f3b9c9|2080432509||t19112.5630171689s|0000e63bc91d4208|102841|rds|vector|||0.027||
+supplemental_materials_html|stem|783d8625fbe6a5e3|935e89b93c968d0b|4745aa592080ea1d|340011991|output/supplemental_materials.html*reports/supplemental_materials.Rmd|t19112.5630564229s|3b3d2ff877dcf893|754491|file|vector|||3.423||
+supplemental_materials_word|stem|95a9d76ddadf1c6f|d87c34a3f03db941|4745aa592080ea1d|-193848955|output/supplemental_materials.docx*reports/supplemental_materials.Rmd|t19112.563097257s|12b8cb24a1cee868|21749|file|vector|||3.503||
+processed_income_grade|stem|b10a748402b309e1|36cbf38e7fcb8b66|3ef83e6fe690077a|-770200007||t19112.5630978422s|d59369a80be142b5|38072|rds|vector|||0.032|data frame results in filter are deprecated, use if_any or if_all.|
+processed_consc_depression_income|stem|3843edf04ffa62b3|f25a772c7cccb8a5|d1a8d6ad593b238b|2014070817||t19112.5630984053s|8ab3ce305677e694|74348|rds|vector|||0.032|data frame results in filter are deprecated, use if_any or if_all.|
+processed_consc_depression|stem|5b6cca0eeaceaf10|e2bdbe8d9e67bab0|9ab2e957834ca6e7|1111851092||t19112.5630986816s|5ed2fdd8bd55b668|47141|rds|vector|||0.01|data frame results in filter are deprecated, use if_any or if_all.|
+processed_neuroticism|stem|ca27ca39a9e7e63d|a946f0bb1cb29fca|5ff3ffed862c156b|260897071||t19112.5630989056s|1dd053c7e01b6676|48815|rds|vector|||0.005|data frame results in filter are deprecated, use if_any or if_all.|
+summary_stats_data|stem|134990f31745da26|18297437ae4985dd|712ee1546be34d65|-1276895728||t19112.5631002604s|ff062bfe0c66b71e|534|rds|vector|||0.115||
+processed_phys_consc|stem|04f817ffd2ad6e1d|4fdaed3b44a14824|b88f7d6c120cdf67|2106948878||t19112.5631005429s|e5bffae8003302f0|92599|rds|vector|||0.01|data frame results in filter are deprecated, use if_any or if_all.|
+single_entered_consc_depression_income|stem|a3e3063ce156e411|33a048f146082865|9f043dc16da33bec|-2005294878||t19112.563100766s|157e8608ccd3a2d4|39532|rds|vector|||0.012||
+single_entered_consc_depression|stem|5f3c452ca2e57c18|f84e8b3fd303f9ca|13ce184fc15eb0d4|1378696908||t19112.5631010091s|60307d159767a34a|23893|rds|vector|||0.015||
+single_entered_neuroticism|stem|54e551c41823bea5|d79e4a520f26b4be|51e9365f16de9731|-879700324||t19112.5631012164s|3e2a0a51b3fe2a67|24074|rds|vector|||0.012||
+summary_stats_table|stem|19f6accd5f85f0fc|7d7f8794d4b0dbce|cec045d6d11a4854|-1354917541||t19112.5631023897s|e52f004090a6a23c|6631|rds|vector|||0.096||
+single_entered_phys_consc|stem|9ff2615b3b3d2a02|44a7e28c72b8096d|5152a81bdc678fda|-958140115||t19112.5631025863s|4a8c8cda6206b323|35531|rds|vector|||0.011||
+regression_consc_depression_income|stem|c0135d3be98f653b|99ff883383d38737|638666bde23ed439|335591110||t19112.5631446042s|59ff5fa8d09d5766|275502|rds|vector|||3.604||
+regression_consc_depression|stem|aa392776889a8746|20f08b8b7c4e10fc|673cb1d012b3e38c|1637059124||t19112.5631681388s|b0fa522ee3add2f3|281566|rds|vector|||2.009||
+regression_neuroticism|stem|5e445127327e294a|6fd3878c694f0113|1e83c17d69e3ec8e|1675890591||t19112.5631917366s|60421841c8d50057|289870|rds|vector|||2.015||
+regression_phys_consc|stem|5291a448736d4fea|7c245f4bf4ad2f01|e0f6718b0f77240d|1456908061||t19112.5632133095s|e79578b8ea0f766a|413896|rds|vector|||1.839||
+results_consc_depression_income|stem|6635f7bc9165e118|7fae167369b5f11f|e2c7be158130d754|-1983912838||t19112.5632183631s|2e0115e1642eeedb|1995947|rds|vector|||0.285||
+results_consc_depression|stem|9a760b179ec6d85c|98476361350398ad|11317873ba2bdbfc|-1933044188||t19112.5632237092s|1e136ffa573ab4b9|2550039|rds|vector|||0.284||
+results_neuroticism|stem|7a14b72cc1b7d629|2d14bb74a67994dd|f041c5aa7c0ff711|1071416746||t19112.5632289131s|3409436fcfb6124c|2637963|rds|vector|||0.273||
+results_phys_consc|stem|bd8a71126e366f81|34f516d62e80bdde|c34c52906aeeb64c|-1136564380||t19112.5632342956s|490c3f258e70d497|3416532|rds|vector|||0.281||
+regression_tables_word|stem|65c56e53f2df8766|0d0a9fab67f87642|5d8a770e137c35ce|175906589|output/tables.docx*reports/tables.Rmd|t19112.5632718612s|334dd533788d2b88|18456|file|vector|||3.248||
+regression_tables_html|stem|5e8462665436fb1c|8deb7c689b1f3d12|5d8a770e137c35ce|-92574164|output/tables.html*reports/tables.Rmd|t19112.5633056563s|3e274a98cfe3f9ec|801998|file|vector|||2.957||
+regression_tables_pdf|stem|af18644429abc0c4|f0f079d028a09121|5d8a770e137c35ce|-1986429497|output/tables.pdf*reports/tables.Rmd|t19112.5633319322s|8e7909dfb7be0043|167562|file|vector|||2.233||
