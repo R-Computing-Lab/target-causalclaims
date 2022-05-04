@@ -47,4 +47,3 @@ results_consc_depression_income
 ```{r, message = FALSE}
 results_neuroticism
 ```
-
