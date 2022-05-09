@@ -23,6 +23,7 @@ targets::tar_read(summary_stats_table)
 summary_stats_table
 ```
 
+<!-- Illustration 1 -->
 
 ## Does Conscientiousness Causally Influence Physical Health (At Age 50)?
 
@@ -30,6 +31,7 @@ summary_stats_table
 results_phys_consc
 ```
 
+<!-- Illustration 2 -->
 ## Does Conscientiousness Causally Influence Mental Health (Depression)?
 
 ```{r, message = FALSE}
@@ -42,6 +44,7 @@ results_consc_depression
 results_consc_depression_income
 ```
 
+<!-- Illustration 3 -->
 ## Does Neuroticism Causally Influence Mental Health (Depression)?
 
 ```{r, message = FALSE}
