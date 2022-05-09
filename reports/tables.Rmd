@@ -24,29 +24,44 @@ summary_stats_table
 ```
 
 <!-- Illustration 1 -->
+# Does Conscientiousness Causally Influence Physical Health (At Age 50)?
+<!-- covariate -->
 
-## Does Conscientiousness Causally Influence Physical Health (At Age 50)?
+
+
+
+## Do sibling differences in conscientiousness predict differences physical health (At Age 50)?
+<!-- discord -->
 
 ```{r, message = FALSE}
 results_phys_consc
 ```
 
 <!-- Illustration 2 -->
-## Does Conscientiousness Causally Influence Mental Health (Depression)?
+# Does Conscientiousness Causally Influence Mental Health (Depression)?
 
+## Do sibling differences in conscientiousness predict differences depression (At Age 50)?
+<!-- discord -->
 ```{r, message = FALSE}
 results_consc_depression
 ```
 
-## Does Conscientiousness Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
+## Do sibling differences in conscientiousness predict differences depression with Income and Highest Grade Level (At Age 50) as Covariates?
+<!-- discord -->
 
 ```{r, message = FALSE}
 results_consc_depression_income
 ```
 
 <!-- Illustration 3 -->
-## Does Neuroticism Causally Influence Mental Health (Depression)?
+# Does Neuroticism Causally Influence Mental Health (Depression)?
 
+
+
+## Do sibling differences in neuroticism predict differences depression (At Age 50)?
+<!-- discord -->
 ```{r, message = FALSE}
 results_neuroticism
 ```
+## Do sibling differences in neuroticism predict differences depression with Income and Highest Grade Level (At Age 50) as Covariates?
+<!-- discord -->
