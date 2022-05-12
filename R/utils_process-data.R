@@ -277,6 +277,46 @@ process_consc_depression_income_data <- function(raw_consc_depression_data, raw_
 
 }
 
+#' Process Neuroticism & Depression Data with Income/Grade info as
+#' Covariates
+#'
+#' @param raw_neuroticism_data The output of `recode_demographics()` on
+#'   neuroticism and depression data.
+#' @param raw_income_grade_data The output of `recode_demographics()` on income
+#'   and grade data.
+#' @param adjust_inflation Logical: Should total net family income at age 50 be
+#'   adjusted for inflation? `TRUE` by default.
+#' @param inflation_year Year to adjust for inflation by.
+#'
+#'
+#'@return A tibble with the case ID, sample ID, race, sex, highest grade
+#'  completed at age 50 (first grade (1) through 12th grade (12); 13 through 20
+#'  corresponding to years of college), the total net family income at age 50
+#'  (in USD), depression and conscientiousness scores (and the
+#'  disorganized/careless & dependable/discplined components of
+#'  conscientiousness) for all NLSY individuals. The 'depression' and
+#'  'conscientiousness' columns have been Z-scored for easier interpretation
+#'  with regression analysis. If `adjust_inflation = TRUE`, then the
+#'  'tnfi_at_age_50' column will be in USD with purchasing power from
+#'  `inflation_year`.
+#'
+#' @export
+#'
+#' @examples
+#'
+process_neuroticism_income_data <- function(raw_neuroticism_data, raw_income_grade_data,
+                                            adjust_inflation = TRUE, inflation_year = 2014) {
+
+  income_grade_data <- process_income_grade_data(raw_income_grade_data,
+                                                 adjust_inflation = adjust_inflation,
+                                                 inflation_year = inflation_year
+  )
+
+  process_neuroticism_data(raw_neuroticism_data) %>%
+    dplyr::left_join(income_grade_data,
+                     by = c("case_id", "sample_id", "race", "sex"))
+
+}
 
 #' Transform NLSY Data into Single Entered Structure for Kin Comparison
 #'
