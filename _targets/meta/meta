@@ -59,6 +59,6 @@ prep_summary_stats_table_data|function|f1c153f72e1fd399||||||||||||||
 make_summary_stats_table|function|8030c06b5cf0ca68||||||||||||||
 process_neuroticism_income_data|function|4990efa45de3a571||||||||||||||
 process_consc_depression_income_data|function|f5b69942fd335a5a||||||||||||||
-regression_tables_html|stem|8af9736ab977d524|5ad1ba269c91f8ba|3f9e6877798da07b|-92574164|output/tables.html*reports/tables.Rmd|t19124.8286115117s|a7e9869a1a522b15|870129|file|vector|||6.995||
-regression_tables_word|stem|ada5fcdb9e56134d|b58ef1d151482cc6|3f9e6877798da07b|175906589|output/tables.docx*reports/tables.Rmd|t19124.8286992294s|e34b57eaa227f6f7|26965|file|vector|||7.556||
-regression_tables_pdf|stem|c688c62fb25ac319|aa7d5ecf6ac40dca|3f9e6877798da07b|-1986429497|output/tables.pdf*reports/tables.Rmd|t19124.8287474183s|46293d820f389efc|199730|file|vector|||4.153||
+regression_tables_html|stem|527379b7f8586732|5ad1ba269c91f8ba|3f9e6877798da07b|-92574164|output/tables.html*reports/tables.Rmd|t19124.8348310089s|2d16fe3afcc5c613|870163|file|vector|||7.263||
+regression_tables_word|stem|b4b95c7df660834a|b58ef1d151482cc6|3f9e6877798da07b|175906589|output/tables.docx*reports/tables.Rmd|t19124.8349181139s|834af10c432b84b1|26608|file|vector|||7.504||
+regression_tables_pdf|stem|835d3c1f72399f8b|aa7d5ecf6ac40dca|3f9e6877798da07b|-1986429497|output/tables.pdf*reports/tables.Rmd|t19124.834967931s|ee9568e36f4681c0|172433|file|vector|||4.291||

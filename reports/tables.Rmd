@@ -58,7 +58,7 @@ results_neuroticism
 
 ## Does Neuroticism Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
 
-```{r}
+```{r, message = FALSE}
 results_neuroticism_income
 ```
 
@@ -90,6 +90,6 @@ results_linear_regression_neuroticism
 
 ## Does Neuroticism Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
 
-```{r}
+```{r, message = FALSE}
 results_linear_regression_neuroticism_income
 ```
