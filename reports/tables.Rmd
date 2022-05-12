@@ -13,16 +13,24 @@ flextable::set_flextable_defaults(
 targets::tar_read(results_consc_depression)
 targets::tar_read(results_consc_depression_income)
 targets::tar_read(results_neuroticism)
+targets::tar_read(results_neuroticism_income)
 targets::tar_read(results_phys_consc)
 targets::tar_read(summary_stats_table)
+
+targets::tar_read(results_linear_regression_phys_consc)
+targets::tar_read(results_linear_regression_neuroticism_income)
+targets::tar_read(results_linear_regression_neuroticism)
+targets::tar_read(results_linear_regression_consc_depression)
+targets::tar_read(results_linear_regression_consc_depression_income)
 ```
 
-# Summary Statistics Table
+# Summary Statistics Tables
 
 ```{r, message = FALSE}
 summary_stats_table
 ```
 
+# Discordant Kinship Regression Results
 
 ## Does Conscientiousness Causally Influence Physical Health (At Age 50)?
 
@@ -46,4 +54,42 @@ results_consc_depression_income
 
 ```{r, message = FALSE}
 results_neuroticism
+```
+
+## Does Neuroticism Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
+
+```{r}
+results_neuroticism_income
+```
+
+# Non-Discordant Kinship Regression Results
+
+## Does Conscientiousness Causally Influence Physical Health (At Age 50)?
+
+```{r, message = FALSE}
+results_linear_regression_phys_consc
+```
+
+## Does Conscientiousness Causally Influence Mental Health (Depression)?
+
+```{r, message = FALSE}
+results_linear_regression_consc_depression
+```
+
+## Does Conscientiousness Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
+
+```{r, message = FALSE}
+results_linear_regression_consc_depression_income
+```
+
+## Does Neuroticism Causally Influence Mental Health (Depression)?
+
+```{r, message = FALSE}
+results_linear_regression_neuroticism
+```
+
+## Does Neuroticism Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
+
+```{r}
+results_linear_regression_neuroticism_income
 ```

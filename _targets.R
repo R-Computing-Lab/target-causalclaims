@@ -7,6 +7,7 @@ source("R/utils_read-data.R")
 source("R/utils_process-data.R")
 source("R/utils_prettify-results.R")
 source("R/utils_summary-stats-table.R")
+source("R/utils-linear_regressions.R")
 
 # Set target-specific options such as packages.
 tar_option_set(packages = c("tidyverse", "here", "NlsyLinks",
@@ -58,6 +59,15 @@ initial_read_process <- list(
       raw_consc_depression_data = raw_consc_depression,
       raw_income_grade_data = raw_income_grade
       )
+  ),
+  # Manually process consc_depression_income
+  # since the function takes a different format less conducive to mapping
+  tar_target(
+    processed_neuroticism_income,
+    process_neuroticism_income_data(
+      raw_neuroticism_data = raw_neuroticism,
+      raw_income_grade_data = raw_income_grade
+    )
   )
 )
 
@@ -65,7 +75,8 @@ initial_read_process <- list(
 modeling_values <- tibble::tibble(
   model = c(
     "neuroticism", "phys_consc",
-    "consc_depression", "consc_depression_income"
+    "consc_depression", "consc_depression_income",
+    "neuroticism_income"
     ),
   raw_data_name = rlang::syms(
     glue::glue("raw_{model}")
@@ -75,7 +86,7 @@ modeling_values <- tibble::tibble(
     ),
   outcome = c(
     "depression", "age_50_physical_health",
-    "depression", "depression"
+    "depression", "depression", "depression"
     ),
   predictors = c(
     "neuroticism", "conscientousness",
@@ -86,7 +97,14 @@ modeling_values <- tibble::tibble(
         "highest_grade_at_age_50",
         "tnfi_at_age_50"
         )
+      ),
+    list(
+      c(
+        "neuroticism",
+        "highest_grade_at_age_50",
+        "tnfi_at_age_50"
       )
+    )
     ),
   results_save_path = glue::glue("output/{model}_results.png"),
 )
@@ -109,6 +127,15 @@ models <- list(
         )
     ),
     tar_target(
+      linear_regressions,
+      linear_reg_oldest_sibling(
+        single_entered_data = single_entered,
+        outcome = outcome,
+        predictors = predictors,
+        demographic_variables = c("race", "sex")
+      )
+    ),
+    tar_target(
       regression,
       discord_regression(
         data = single_entered,
@@ -122,6 +149,10 @@ models <- list(
     tar_target(
       results,
       prettify_regression_results(regression)
+    ),
+    tar_target(
+      results_linear_regression,
+      prettify_regression_results(linear_regressions)
     ),
     values = modeling_values,
     names = "model"
