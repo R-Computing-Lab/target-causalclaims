@@ -1,7 +1,5 @@
 ---
 title: "Causal Claims Tables"
-author: "Jonathan Trattner"
-date: "3/16/2022"
 output: pdf_document
 ---
 
