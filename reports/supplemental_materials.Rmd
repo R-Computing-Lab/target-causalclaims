@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   )
 ```
 
-This document explains how to reproduce the analyses included in the 2022 paper "Sibling Models Can test Causal Claims without Experiments: Applications for Pyschology" by S. Mason Garrison, Hannah Robertson, Jonathan D. Trattner, and Joseph Lee Rodgers. 
+This document explains how to reproduce the analyses included in the manuscript "Sibling Models Can test Causal Claims without Experiments: Applications for Pyschology". 
 
 If you are familiar with version-control using git and GitHub, the easiest way to replicate our analysis is by cloning the project repository hosted at [github.com/R-Computing-Lab/target-causal-claims](https://github.com/R-Computing-Lab/target-causalclaims). Once cloned, you can open your favorite R IDE (e.g., RStudio or VSCode), and run the following:
 
