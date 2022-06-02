@@ -259,7 +259,7 @@ make_summary_stats_table <- function(
         "**Summary Statistics for NLSY Variables**
     Physical Health scale ranges from 10 to 70.
     Depression measure from CES-D, ranging from 0 to 24;
-    Neuroticism and Conscientiousness dervied from TIPI, ranging from 1 to 7;
+    Neuroticism and Conscientiousness derived from TIPI, ranging from 1 to 7;
     Education represents highest grade completed, ranging from 0 (none) to 20 (eight years of college or more);
     Income represents total net family income in 2014 dollars",
       )
