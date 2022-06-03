@@ -89,11 +89,11 @@ modeling_values <- tibble::tibble(
     "depression", "depression", "depression"
     ),
   predictors = c(
-    "neuroticism", "conscientousness",
-    "conscientousness",
+    "neuroticism", "conscientiousness",
+    "conscientiousness",
     list(
       c(
-        "conscientousness",
+        "conscientiousness",
         "highest_grade_at_age_50",
         "tnfi_at_age_50"
         )
