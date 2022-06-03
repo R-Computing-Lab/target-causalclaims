@@ -11,8 +11,10 @@ prettify_regression_results <- function(regression_object) {
   regression_object %>%
     gtsummary::tbl_regression() %>%
     gtsummary::add_glance_source_note(
-      label = list(df  ~ "Degrees of Freedom"),
-      include = c(r.squared, statistic, df, p.value)
+      label = list(statistic ~ "F-Statistic",
+                   df  ~ "DF1",
+                   df.residual  ~ "DF2"),
+      include = c(r.squared, statistic, df, df.residual, p.value, nobs)
       ) %>%
     gtsummary::modify_header(
       statistic ~ "**T-Statistic**", p.value ~ "**P-Value**"
