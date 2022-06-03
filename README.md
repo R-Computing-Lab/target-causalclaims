@@ -28,7 +28,7 @@ targets::tar_make()
 
 ## Step 3: Review Results
 
-That's it! To inspect the underling regression objects, run `targets::tar_load(contains("results"))` or view a prettified table version in the `output/` folder.
+That's it! To inspect the underlying regression objects, run `targets::tar_load(contains("results"))` or view a prettified table version in the `output/` folder.
 
 ---------------
 
