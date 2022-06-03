@@ -45,10 +45,10 @@ prep_summary_stats_table_data <- function(
       ),
       # Reverse Coding disorganized/careless measurement from TIPI and
       # adding with dependable/discplined
-      conscientousness = (reverse_code(disorganized_careless) + dependable_disciplined) / 2
+      conscientiousness = (reverse_code(disorganized_careless) + dependable_disciplined) / 2
     ) %>%
     select(
-      conscientousness
+      conscientiousness
     )
 
   neuroticism_table_var <- neuroticism_data %>%

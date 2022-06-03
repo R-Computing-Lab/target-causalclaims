@@ -111,7 +111,7 @@ process_phys_consc_data <- function(.data) {
     dplyr::mutate(
       age_40_physical_health = scale(age_40_physical_health)[,1],
       age_50_physical_health = scale(age_50_physical_health)[,1],
-      conscientousness = scale(
+      conscientiousness = scale(
         # Reverse Coding disorganized/careless measurement from TIPI and
         # adding with dependable/discplined
         reverse_code(disorganized_careless) + dependable_disciplined
@@ -150,7 +150,7 @@ process_consc_depression_data <- function(.data) {
                   function(value) value >= 0)) %>%
     dplyr::mutate(
       depression = scale(depression)[,1], # Depression column from NLSY,
-      conscientousness = scale(
+      conscientiousness = scale(
         # Reverse Coding disorganized/careless measurement from TIPI and
         # adding with dependable/discplined
         reverse_code(disorganized_careless) + dependable_disciplined

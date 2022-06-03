@@ -20,7 +20,7 @@ This recreates all of the R packages used in the analysis on your computer. Beca
 
 The [targets](https://github.com/ropensci/targets) package is a pipeline toolkit for conducting analyses in R. It helps you maintain a reproducible workflow with minimal overhead by learning how code fits together and only running out-of-date tasks. For more information on the targets package, check out the [user manual](https://books.ropensci.org/targets/).
 
-In order to re-run the analysis from the paper, all you need to do is call the folllowing and the targets package will re-run any necessary tasks, saving the output into `_targets/objects` folder.
+In order to re-run the analysis from the paper, all you need to do is call the following and the targets package will re-run any necessary tasks, saving the output into `_targets/objects` folder.
 
 ```r
 targets::tar_make()

@@ -4,3 +4,4 @@ _targets/objects/
 .RData
 library/
 library
+output/~$tables.docx
