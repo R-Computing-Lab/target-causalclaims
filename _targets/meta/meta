@@ -4,9 +4,6 @@ link_pairs|stem|02eaa9e3d69127e0|99544b9aabdc88b5|0bb3d34ce2751956|173348377||t1
 raw_income_grade|stem|3781a4dfa4feb54a|46643af06d66baf0|ef38605ea8f3b9c9|737572088||t19146.6955138246s|8f17d338413e129e|269628|rds|vector|||0.27||
 raw_neuroticism|stem|fdd47fbfc782bc93|e5e1f302d0bcceed|ef38605ea8f3b9c9|-1593698842||t19146.6955197527s|66df420c23a3b282|266422|rds|vector|||0.16||
 raw_consc_depression|stem|ff878e62a6736853|b5b9ef8d43b3dd84|ef38605ea8f3b9c9|9200120||t19146.6955221421s|400ab97f81d65514|71952|rds|vector|||0.12||
-supplemental_materials_word|stem|cd09c330fdc8b069|d87c34a3f03db941|4745aa592080ea1d|-193848955|output/supplemental_materials.docx*reports/supplemental_materials.Rmd|t19146.6957260475s|523811c52e7f2dd4|21765|file|vector|||17.63||
-supplemental_materials_pdf|stem|c08553521dcf96a4|37d00c6136e258ef|4745aa592080ea1d|1803437746|output/supplemental_materials.pdf*reports/supplemental_materials.Rmd|t19146.6958711449s|c71e1351960a41b5|215647|file|vector|||12.53||
-supplemental_materials_html|stem|733c09ba88cb51aa|935e89b93c968d0b|4745aa592080ea1d|340011991|output/supplemental_materials.html*reports/supplemental_materials.Rmd|t19146.6959650234s|526a5d84e58ae42a|649487|file|vector|||8.25||
 processed_income_grade|stem|92d0641b6ff827f8|36cbf38e7fcb8b66|984abf2519d127da|-770200007||t19146.6959690089s|b08b471ffcfa1192|38072|rds|vector|||0.09|data frame results in filter are deprecated, use if_any or if_all.|
 processed_neuroticism_income|stem|e96492b71d74e6a7|59790ce109b9257a|30a15cbf415ada1a|-700032999||t19146.6959705442s|b33127cfa01365ec|75844|rds|vector|||0.11|data frame results in filter are deprecated, use if_any or if_all.|
 processed_neuroticism|stem|472dcb00bab99af1|a946f0bb1cb29fca|18e31be5c69eaea3|260897071||t19146.6959712024s|39b0efed1e3cdc33|48817|rds|vector|||0.03|data frame results in filter are deprecated, use if_any or if_all.|
@@ -38,7 +35,7 @@ tables|object|93d8119309a2ab28||||||||||||||
 modeling_values|object|c136bbff3053c809||||||||||||||
 models|object|28bab14f37d2f353||||||||||||||
 make_single_entered|function|f20af65e530629c6||||||||||||||
-prettify_regression_results|function|c4888e4321f9ef18||||||||||||||
+prettify_regression_results|function|cbe4fe876f58cb20||||||||||||||
 recode_demographics|function|47956b45f233a66a||||||||||||||
 FitFlextableToPage|function|2836637db1e7dadc||||||||||||||
 read_nlsy_data|function|83a43f46bc360277||||||||||||||
@@ -49,16 +46,19 @@ prep_summary_stats_table_data|function|56ad13da06513a68||||||||||||||
 make_summary_stats_table|function|d829a7dab66aae73||||||||||||||
 process_neuroticism_income_data|function|4990efa45de3a571||||||||||||||
 process_consc_depression_income_data|function|ac1874c6d2000390||||||||||||||
-results_phys_consc|stem|37acd744f7f97865|34f516d62e80bdde|b89df0de952e5397|-1136564380||t19146.7355985233s|54a2bfccfd665505|3395905|rds|vector|||2.14||
-results_linear_regression_phys_consc|stem|20c59c2e9cd197ad|4e5ae25b468903a0|119e0e19562a3ca9|-954572219||t19146.7356085356s|d6d77ab5c7f7a734|1179504|rds|vector|||0.71||
-results_neuroticism_income|stem|036069de182d935a|ff18715196cd8eed|7474bb8d6196fa61|-812271575||t19146.7356186901s|40c70ba1dd8b6573|1991496|rds|vector|||0.69||
-results_linear_regression_neuroticism_income|stem|a2829e10d656c0cb|b576f2cd4819e9b9|734b1fc78578c7c3|359522996||t19146.735628775s|86e2f719e169848f|1405499|rds|vector|||0.71||
-results_neuroticism|stem|b9310e768808cd6b|2d14bb74a67994dd|600912cac50247c9|1071416746||t19146.7356397361s|ac56f1c207449265|2618602|rds|vector|||0.72||
-results_linear_regression_neuroticism|stem|fe358a35ea1e51b5|ff0d246bf46171e4|5a5da31c7b61cc5e|-1909287807||t19146.735649756s|5b8b848685099e3e|933290|rds|vector|||0.7||
-results_consc_depression|stem|3977cb77e4a4f95b|98476361350398ad|8eaccfc0ba185e43|-1933044188||t19146.7356606357s|080d0e2fc141bac1|2530860|rds|vector|||0.71||
-results_linear_regression_consc_depression|stem|01e590391a2a1a2d|be0bca803bc28bfe|a5df90fbf345abed|2107155878||t19146.7356700935s|3842f70966ca1c4b|907038|rds|vector|||0.65||
-results_consc_depression_income|stem|b65cc7802afbeb83|7fae167369b5f11f|7ed1f9aff103fa51|-1983912838||t19146.7356806112s|31e1b5635ff174ff|1987215|rds|vector|||0.7||
-results_linear_regression_consc_depression_income|stem|944b266ce4f68bee|b72c5d7e2a71aa58|43f9d394ec61b320|460125025||t19146.7356902513s|8020b0acec847b8c|1392271|rds|vector|||0.67||
-regression_tables_html|stem|e724bb61b5a65dbc|5ad1ba269c91f8ba|f3a9b4420c7d1427|-92574164|output/tables.html*reports/tables.Rmd|t19146.7358662608s|0be337dd006c61cd|768542|file|vector|||15.37||
-regression_tables_word|stem|ef8655a5662e7616|b58ef1d151482cc6|f3a9b4420c7d1427|175906589|output/tables.docx*reports/tables.Rmd|t19146.7360955339s|29a4fe326ad1242b|26200|file|vector|||19.63||
-regression_tables_pdf|stem|79ad1b923a6d0854|aa7d5ecf6ac40dca|f3a9b4420c7d1427|-1986429497|output/tables.pdf*reports/tables.Rmd|t19146.7362165307s|6033a6168fb0a9eb|172829|file|vector|||10.46||
+supplemental_materials_word|stem|e54c5b86130b1b1b|d87c34a3f03db941|4745aa592080ea1d|-193848955|output/supplemental_materials.docx*reports/supplemental_materials.Rmd|t19146.8517661549s|eb8abe3937f8a626|21597|file|vector|||10.47||
+supplemental_materials_pdf|stem|1b8d6c01aad7a38b|37d00c6136e258ef|4745aa592080ea1d|1803437746|output/supplemental_materials.pdf*reports/supplemental_materials.Rmd|t19146.8518817576s|eaf7960951164a50|215480|file|vector|||10||
+supplemental_materials_html|stem|8377f3b0609aa1f5|935e89b93c968d0b|4745aa592080ea1d|340011991|output/supplemental_materials.html*reports/supplemental_materials.Rmd|t19146.8519732446s|9e604fdaa483fb60|649320|file|vector|||8.06||
+results_phys_consc|stem|65e4b030dce2510e|34f516d62e80bdde|dae916c957414180|-1136564380||t19146.8519897164s|0e4d4e0e1c9126b7|3396291|rds|vector|||0.86||
+results_linear_regression_phys_consc|stem|e26f7715a6e5885e|4e5ae25b468903a0|3e8c5872baf5cb6b|-954572219||t19146.8520006478s|082184aac9b07c1c|1179953|rds|vector|||0.78||
+results_neuroticism_income|stem|1b528be80b1d007e|ff18715196cd8eed|dc20d9fbdc253352|-812271575||t19146.8520121221s|676672c807f6a5c3|1991934|rds|vector|||0.79||
+results_linear_regression_neuroticism_income|stem|e7dc3c43a0e3b6ad|b576f2cd4819e9b9|be529849c33af6e8|359522996||t19146.8520236653s|386f5de78d589f73|1405752|rds|vector|||0.79||
+results_neuroticism|stem|94c7522e24f84016|2d14bb74a67994dd|de78eb19dfdc03a9|1071416746||t19146.8520366164s|5ffa91215e9c89b4|2619150|rds|vector|||0.86||
+results_linear_regression_neuroticism|stem|bb0175b1641cb1a1|ff0d246bf46171e4|acd45b2d017d12f9|-1909287807||t19146.8520482058s|6cebc5867556044f|933705|rds|vector|||0.84||
+results_consc_depression|stem|a2a85cf5127cd659|98476361350398ad|147ce5044ec92f12|-1933044188||t19146.8520607417s|a8618183e9f74ba6|2531502|rds|vector|||0.82||
+results_linear_regression_consc_depression|stem|2fc5114b7f6e3afb|be0bca803bc28bfe|91760bb6cadb11b1|2107155878||t19146.8520719732s|a81c465633771cb5|907633|rds|vector|||0.8||
+results_consc_depression_income|stem|34f068c28d7f7637|7fae167369b5f11f|45e8886941e8f407|-1983912838||t19146.8520848211s|6157da317f3ada1e|1987829|rds|vector|||0.83||
+results_linear_regression_consc_depression_income|stem|28c16e2df8ae62c3|b72c5d7e2a71aa58|32832b5cbe492f42|460125025||t19146.8520988226s|6cc193ae82de09df|1392943|rds|vector|||0.97||
+regression_tables_html|stem|3ff1d602766f815c|5ad1ba269c91f8ba|a857ea56037c04c9|-92574164|output/tables.html*reports/tables.Rmd|t19146.8523210052s|68da9fbf8a854f39|770660|file|vector|||19.37||
+regression_tables_word|stem|9ab10bc2e4a329df|b58ef1d151482cc6|a857ea56037c04c9|175906589|output/tables.docx*reports/tables.Rmd|t19146.852511895s|b0f25475870bfd56|27160|file|vector|||16.28||
+regression_tables_pdf|stem|1c61ac9b1b5d93b6|aa7d5ecf6ac40dca|a857ea56037c04c9|-1986429497|output/tables.pdf*reports/tables.Rmd|t19146.8526291739s|34af3bdecc589d70|173649|file|vector|||10.14||

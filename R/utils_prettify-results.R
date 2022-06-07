@@ -9,7 +9,7 @@
 #' @examples
 prettify_regression_results <- function(regression_object) {
   regression_object %>%
-    gtsummary::tbl_regression() %>%
+    gtsummary::tbl_regression(intercept=TRUE) %>%
     gtsummary::add_glance_source_note(
       label = list(statistic ~ "F-Statistic",
                    df  ~ "DF1",
@@ -17,6 +17,6 @@ prettify_regression_results <- function(regression_object) {
       include = c(r.squared, statistic, df, df.residual, p.value, nobs)
       ) %>%
     gtsummary::modify_header(
-      statistic ~ "**T-Statistic**", p.value ~ "**P-Value**"
+      statistic ~ "**t-Statistic**", p.value ~ "**p-value**"
       )
 }
