@@ -471,7 +471,7 @@ processed_neuroticism_data &lt;- read_csv(
 <p>In order to perform the discordant kinship regression, we need to
 properly define familial relationships for NLSY subjects. This is easily
 done using the the NlsyLinks R package<span class="citation">(Beasley et
-al. 2016)</span>, the methods of which are described in <span class="citation">(Rodgers et al. 2016)</span>.</p>
+al. 2016)</span>, the methods of which are described in <span class="citation">(Rodgers et al. 2016)</span>. </p>
 <pre class="r"><code>single_entered_neuroticism &lt;- processed_neuroticism_data %&gt;%
   mutate(
     SubjectTag = case_id * 100
