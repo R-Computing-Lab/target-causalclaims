@@ -12,7 +12,7 @@
 #' @param neuroticism_data Raw data for asking whether Neuroticism Causally
 #'   Influence Mental Health (Depression)?
 #' @param income_grade_data Raw income/education data used when asking whether
-#'   Conscientiousness Causally Influence Mental Health (Depression) with Income
+#'   Conscientiousness Causally Influence Mental Health (Depression; CES-D) with Income
 #'   and Highest Grade Level (At Age 50) as Covariates?
 #' @param phys_consc_data Raw data for asking whether Conscientiousness Causally
 #'   Influence Physical Health
@@ -31,7 +31,7 @@ prep_summary_stats_table_data <- function(
 
   conscientuousness_table_var <- consc_depression_data %>%
     dplyr::transmute(
-      depression = H0013301,
+      depression = H0013301, #CES-D age 50
       dependable_disciplined = T4998602,
       disorganized_careless = T4998607
     ) %>%
