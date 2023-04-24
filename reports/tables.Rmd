@@ -20,6 +20,18 @@ targets::tar_read(results_linear_regression_neuroticism_income)
 targets::tar_read(results_linear_regression_neuroticism)
 targets::tar_read(results_linear_regression_consc_depression)
 targets::tar_read(results_linear_regression_consc_depression_income)
+
+targets::tar_read(results_linear_jtools_phys_consc)
+targets::tar_read(results_linear_jtools_neuroticism_income)
+targets::tar_read(results_linear_jtools_neuroticism)
+targets::tar_read(results_linear_jtools_consc_depression)
+targets::tar_read(results_linear_jtools_consc_depression_income)
+
+targets::tar_read(results_jtools_phys_consc)
+targets::tar_read(results_jtools_neuroticism_income)
+targets::tar_read(results_jtools_neuroticism)
+targets::tar_read(results_jtools_consc_depression)
+targets::tar_read(results_jtools_consc_depression_income)
 ```
 
 # Summary Statistics
@@ -36,10 +48,21 @@ summary_stats_table
 ```{r, message = FALSE}
 results_linear_regression_phys_consc
 ```
+
+
 ## Discordant: Does Conscientiousness Causally Influence Physical Health (At Age 50)?
 
 ```{r, message = FALSE}
 results_phys_consc
+```
+
+## Standardized
+```{r}
+
+results_linear_jtools_phys_consc
+
+results_jtools_phys_consc
+
 ```
 
 # Illustration 2:  Does conscientiousness causally influence mental health?
@@ -70,6 +93,18 @@ results_consc_depression_income
 ```
 
 
+## standardized
+```{r}
+results_jtools_consc_depression
+results_jtools_consc_depression_income
+
+
+
+results_linear_jtools_consc_depression
+results_linear_jtools_consc_depression_income
+```
+
+
 # Illustration 3 Does neuroticism causally influence mental health?
 
 ## OLS: Does Neuroticism Causally Influence Mental Health (Depression)?
@@ -95,4 +130,14 @@ results_neuroticism
 
 ```{r, message = FALSE}
 results_neuroticism_income
+```
+
+## Standardized
+```{r}
+results_linear_jtools_neuroticism
+results_linear_jtools_neuroticism_income
+
+results_jtools_neuroticism
+results_jtools_neuroticism_income
+
 ```

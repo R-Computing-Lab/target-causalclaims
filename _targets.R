@@ -151,8 +151,16 @@ models <- list(
       prettify_regression_results(regression)
     ),
     tar_target(
+      results_jtools,
+      prettify_jtools(regression)
+    ),
+    tar_target(
       results_linear_regression,
       prettify_regression_results(linear_regressions)
+    ),
+    tar_target(
+      results_linear_jtools,
+      prettify_jtools(linear_regressions)
     ),
     values = modeling_values,
     names = "model"
