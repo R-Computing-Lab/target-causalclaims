@@ -9,7 +9,7 @@
 #' @examples
 prettify_regression_results <- function(regression_object,
                                         intercept=TRUE,
-                                        standardize=TRUE,
+                                        standardize=FALSE,
 					digits=3) {
 
 temp <-  regression_object %>%
