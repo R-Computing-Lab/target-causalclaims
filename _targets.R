@@ -143,7 +143,8 @@ models <- list(
         predictors = predictors,
         sex = "sex",
         race = "race",
-        pair_identifiers = c("_s1", "_s2")
+        pair_identifiers = c("_s1", "_s2"),
+        id = "id"
       )
     ),
     tar_target(

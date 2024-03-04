@@ -369,6 +369,7 @@ make_single_entered <- function(processed_data,
       subject_tag_s2 = SubjectTag_S2,
       extended_id = ExtendedID,
       relationship_path = RelationshipPath
-    )
+    )  %>%
+  mutate(id = row_number())
 
 }
