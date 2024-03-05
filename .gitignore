@@ -5,3 +5,5 @@ _targets/objects/
 library/
 library
 output/~$tables.docx
+*.log
+*.pdf

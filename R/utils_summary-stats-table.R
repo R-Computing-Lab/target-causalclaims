@@ -164,7 +164,7 @@ prep_summary_stats_table_data <- function(
     ) %>%
     mutate(
       skim_variable = case_when(
-        skim_variable == "age_40_physical_health" ~ "Physical Health",
+     #   skim_variable == "age_40_physical_health" ~ "Physical Health",
         skim_variable == "age_50_physical_health" ~ "Physical Health",
         skim_variable == "depression_age_50" ~ "Depression",
         skim_variable == "highest_grade_at_age_50" ~ "Education",
@@ -181,7 +181,7 @@ prep_summary_stats_table_data <- function(
     ) %>%
     select(
       -n_missing
-    )
+    ) %>% filter(skim_variable != "Age_40_physical_health")
 
 }
 
@@ -235,29 +235,30 @@ make_summary_stats_table <- function(
       numeric.p100 = "Maximum"
     ) %>%
     flextable::align_nottext_col("center") %>%
-    flextable::autofit() %>%
-    flextable::footnote(
-      i = 1,
-      j = 1,
-      value = flextable::as_paragraph(
-        "As measured at age 40"
-      ),
-      ref_symbols = c("i")
-    ) %>%
-    flextable::footnote(
-      i = c(2,3,6,7),
-      j = 1,
-      value = flextable::as_paragraph(
-        "As measured at age 50"
-      ),
-      ref_symbols = c("ii")
-    )
+    flextable::autofit() #%>%
+ #   flextable::footnote(
+#      i = 1,
+#      j = 1,
+#      value = flextable::as_paragraph(
+#        "As measured at age 40"
+#      ),
+#      ref_symbols = c("i")
+   # ) %>%
+#    flextable::footnote(
+#      i = c(2,3,6,7),
+#      j = 1,
+ #     value = flextable::as_paragraph(
+#        "As measured at age 50"
+ #     ),
+#      ref_symbols = c("i")
+ #   ) %>%
+#  flextable::delete_rows(i = 1, part = "body")
 
   if (include_caption) {
     out <- out %>%
       flextable::set_caption(
-        "**Summary Statistics for NLSY Variables**
-    Physical Health scale ranges from 10 to 70.
+        " **Summary Statistics for NLSY Variables**
+    Physical Health scale ranges from 0 to 100.
     Depression measure from CES-D, ranging from 0 to 24;
     Neuroticism and Conscientiousness derived from TIPI, ranging from 1 to 7;
     Education represents highest grade completed, ranging from 0 (none) to 20 (eight years of college or more);

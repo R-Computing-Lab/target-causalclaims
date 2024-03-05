@@ -143,7 +143,8 @@ models <- list(
         predictors = predictors,
         sex = "sex",
         race = "race",
-        pair_identifiers = c("_s1", "_s2")
+        pair_identifiers = c("_s1", "_s2"),
+        id = "id"
       )
     ),
     tar_target(
@@ -201,11 +202,12 @@ tables <- list(
     ),
     values = tibble::tibble(
       format = c(
-        "rmarkdown::pdf_document",
+   #     "rmarkdown::pdf_document",
         "rmarkdown::html_document",
         "rmarkdown::word_document"
       ),
-      suffix = c("pdf", "html", "word")
+      suffix = c(#"pdf",
+        "html", "word")
     ),
     names = "suffix"
   )

@@ -56,9 +56,9 @@ results_linear_regression_phys_consc
 results_phys_consc
 ```
 
-## Standardized
-```{r}
 
+```{r eval=FALSE, include=FALSE}
+## Standardized
 results_linear_jtools_phys_consc
 
 results_jtools_phys_consc
@@ -74,17 +74,23 @@ results_jtools_phys_consc
 results_linear_regression_consc_depression
 ```
 
+
+
+
 ## OLS: Does Conscientiousness Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
 
 ```{r, message = FALSE}
 results_linear_regression_consc_depression_income
 ```
 
+
+
 ## Discordant: Does Conscientiousness Causally Influence Mental Health (Depression)?
 
 ```{r, message = FALSE}
 results_consc_depression
 ```
+
 
 ## Discordant: Does Conscientiousness Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
 
@@ -93,8 +99,8 @@ results_consc_depression_income
 ```
 
 
+```{r eval=FALSE, include=FALSE}
 ## standardized
-```{r}
 results_jtools_consc_depression
 results_jtools_consc_depression_income
 
@@ -105,7 +111,7 @@ results_linear_jtools_consc_depression_income
 ```
 
 
-# Illustration 3 Does neuroticism causally influence mental health?
+# Illustration 3: Does neuroticism causally influence mental health?
 
 ## OLS: Does Neuroticism Causally Influence Mental Health (Depression)?
 
@@ -132,8 +138,9 @@ results_neuroticism
 results_neuroticism_income
 ```
 
+
+```{r eval=FALSE, include=FALSE}
 ## Standardized
-```{r}
 results_linear_jtools_neuroticism
 results_linear_jtools_neuroticism_income
 
