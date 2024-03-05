@@ -89,7 +89,7 @@ processed_neuroticism_data <- read_csv(
       neuroticism = scale(
         reverse_code(calm_stable) + anxious_upset
         )[,1]
-      )
+      ) 
 
 ```
 
@@ -131,7 +131,8 @@ single_entered_neuroticism <- processed_neuroticism_data %>%
       subject_tag_s2 = SubjectTag_S2,
       extended_id = ExtendedID,
       relationship_path = RelationshipPath
-    )
+    )  %>%
+  mutate(id = row_number())
 
 ```
 
@@ -144,7 +145,8 @@ neuroticism_fit <- discord_regression(
         predictors = "neuroticism",
         sex = "sex",
         race = "race",
-        pair_identifiers = c("_s1", "_s2")
+        pair_identifiers = c("_s1", "_s2"),
+        id = "id"
       )
 ```
 

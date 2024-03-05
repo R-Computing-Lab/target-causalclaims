@@ -202,11 +202,12 @@ tables <- list(
     ),
     values = tibble::tibble(
       format = c(
-        "rmarkdown::pdf_document",
+   #     "rmarkdown::pdf_document",
         "rmarkdown::html_document",
         "rmarkdown::word_document"
       ),
-      suffix = c("pdf", "html", "word")
+      suffix = c(#"pdf",
+        "html", "word")
     ),
     names = "suffix"
   )
