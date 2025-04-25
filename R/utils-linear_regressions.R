@@ -1,5 +1,3 @@
-
-
 #' Perform a Linear Regression (non-Discordant) Using First-Born
 #'
 #' @param single_entered_data The output of [make_single_entered()]
@@ -15,12 +13,10 @@
 #' @export
 #'
 linear_reg_oldest_sibling <- function(
-  single_entered_data,
-  outcome,
-  predictors,
-  demographic_variables = c("race", "sex")
-) {
-
+    single_entered_data,
+    outcome,
+    predictors,
+    demographic_variables = c("race", "sex")) {
   older_sibling_data <- single_entered_data %>%
     dplyr::select(
       contains("_s1")
@@ -41,7 +37,5 @@ linear_reg_oldest_sibling <- function(
       sep = " ~ "
     )
   )
-
   lm(model_formula, data = older_sibling_data)
-
 }

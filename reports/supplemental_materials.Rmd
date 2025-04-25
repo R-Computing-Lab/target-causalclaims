@@ -36,7 +36,7 @@ library(NlsyLinks)
 library(discord)
 library(gtsummary)
 library(broom)
-
+library(broom.helpers)
 #' Reverse Code Survey Items
 #'
 #' @description From https://github.com/svmiller/stevemisc/blob/master/R/revcode.R

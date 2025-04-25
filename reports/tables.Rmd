@@ -76,7 +76,6 @@ results_linear_regression_consc_depression
 
 
 
-
 ## OLS: Does Conscientiousness Causally Influence Mental Health (Depression) with Income and Highest Grade Level (At Age 50) as Covariates?
 
 ```{r, message = FALSE}
@@ -138,6 +137,7 @@ results_neuroticism
 results_neuroticism_income
 ```
 
+## Standardized
 
 ```{r eval=FALSE, include=FALSE}
 ## Standardized

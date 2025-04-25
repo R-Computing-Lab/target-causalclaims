@@ -57,8 +57,8 @@ convert_to_summ <- function(regression_object, confint = TRUE, scale = TRUE, tra
 #' @examples
 prettify_regression_results <- function(regression_object,
                                         intercept=TRUE,
-                                        standardize = TRUE,
-                                        report_unstandardized = FALSE,
+                                        standardize = FALSE,
+                                        report_unstandardized = TRUE,
                                         digits = 3,
                                         scale = TRUE,
                                         transform.response = TRUE,
@@ -78,7 +78,7 @@ temp <-   convert_to_summ(regression_object,
             ) %>%
         gtsummary::modify_header(
             statistic ~ "**t-statistic**",
-            ci ~ "**95% CI**", p.value ~ "**p-value**"
+            conf.low ~ "**95% CI**", p.value ~ "**p-value**"
         )
 if(!confint){temp %>%
         gtsummary::modify_column_hide(column = ci) %>%
@@ -96,7 +96,7 @@ temp_stnd <- convert_to_summ(regression_object, confint, scale=scale,
             estimate ~ "**β**"
   )
 if(!confint){temp_stnd %>%
-        gtsummary::modify_column_hide(column = ci) %>%
+        gtsummary::modify_column_hide(column = conf.low) %>%
         gtsummary::modify_column_unhide(column = std.error)
   }
 temp <-
@@ -113,9 +113,9 @@ temp <-
     gtsummary::modify_header(
       estimate ~ "**Standardized β**",
       statistic ~ "**t-statistic**", p.value ~ "**p-value**"
-      ) %>% gtsummary::modify_table_body(~.x %>% dplyr::relocate(ci, .after = estimate))
+      ) %>% gtsummary::modify_table_body(~.x %>% dplyr::relocate(conf.low, .after = estimate))
   if(!confint){temp %>%
-      gtsummary::modify_column_hide(column = ci) %>%
+      gtsummary::modify_column_hide(column= conf.low) %>%
       gtsummary::modify_column_unhide(column = std.error)
   }
 }
@@ -147,7 +147,7 @@ prettify_jtools <- function(regression_object,
                                         scale=TRUE,
                                         transform.response=TRUE,
                                         digits=3,
-										confint = FALSE,
+                            confint = FALSE,
                             export_tbl=FALSE
 ){
   if(!export_tbl){
