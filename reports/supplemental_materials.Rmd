@@ -32,16 +32,10 @@ For this example, we are looking at whether neuroticism causally influences ment
 
 ```{r}
 library(tidyverse)
-# Special installation of NlsyLinks needed
-if (!require("NlsyLinks")) {
-  install.packages(
-  "NlsyLinks",
-  repos = "https://mran.microsoft.com/snapshot/2021-04-01"
-  )
-}
 library(NlsyLinks)
 library(discord)
 library(gtsummary)
+library(broom)
 
 #' Reverse Code Survey Items
 #'

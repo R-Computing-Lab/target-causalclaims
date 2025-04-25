@@ -176,7 +176,8 @@ process_consc_depression_data <- function(.data) {
 #' @examples
 #'
 process_income_grade_data <- function(.data,
-                                      adjust_inflation = TRUE, inflation_year = 2014) {
+                                      adjust_inflation = TRUE, inflation_year = 2014,
+                                      scale = TRUE) {
 
   # Data from https://data.bls.gov/pdq/SurveyOutputServlet
   cpi_data <- data.frame(
@@ -217,7 +218,7 @@ process_income_grade_data <- function(.data,
                                                     turns_50 == 2010 ~ tnfi_2010,
                                                     turns_50 == 2012 ~ tnfi_2012,
                                                     turns_50 == 2014 ~ tnfi_2014),
-                  .after = turns_50)
+                  .after = turns_50) 
 
   if (adjust_inflation) {
 
@@ -227,6 +228,13 @@ process_income_grade_data <- function(.data,
       dplyr::left_join(out, by = c("cpi_year" = "turns_50")) %>%
       dplyr::mutate(tnfi_at_age_50 = (cost_to_adjust * tnfi_at_age_50) / cpi_cost)
   }
+
+  if (scale == TRUE) {
+    out <- out %>%
+      dplyr::mutate(tnfi_at_age_50 = scale(tnfi_at_age_50)[,1],
+                    highest_grade_at_age_50 = scale(highest_grade_at_age_50)[,1])
+  }
+
 
   out %>%
     dplyr::select(case_id, sample_id, race, sex,

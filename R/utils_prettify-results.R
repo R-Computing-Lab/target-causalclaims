@@ -102,7 +102,7 @@ if(!confint){temp_stnd %>%
 temp <-
   gtsummary::tbl_merge(
     list(temp_stnd, temp),
-    tab_spanner = c("**Standardized**", "**Unstandardized**")
+    tab_spanner = c("**Standardized**", "**Raw**")
   )
 } else if(standardize){
   temp <- convert_to_summ(regression_object, confint, scale=scale,
