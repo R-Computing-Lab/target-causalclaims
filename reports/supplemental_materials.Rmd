@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   message = FALSE
   )
 ```
+
 This document explains how to reproduce the specific analyses reported in "Sibling Models Can Test Causal Claims without Experiments: Applications for Psychology."
 For a complete tutorial on applying discordant kinship regression to your own data, see the "Complete Workflow" vignette in the discord package
 
@@ -44,6 +45,7 @@ library(discord)
 library(gtsummary)
 library(broom)
 library(broom.helpers)
+library(janitor)
 #' Reverse Code Survey Items
 #'
 #' @description From https://github.com/svmiller/stevemisc/blob/master/R/revcode.R
@@ -166,5 +168,7 @@ neuroticism_fit %>%
 ```
 
 Out GitHub repository contains both the [data]((https://github.com/R-Computing-Lab/target-causalclaims/tree/main/data)) for the other questions addressed in our paper and [commented code](https://github.com/R-Computing-Lab/target-causalclaims/blob/main/R/utils_process-data.R) for the specific variable transformations.
+
+
 
 # Citations

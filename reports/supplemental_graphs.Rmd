@@ -1,0 +1,976 @@
+---
+title: "Supplemental Material Graphs"
+author: ""
+date: ""
+output: word_document
+bibliography: supplemental_materials.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE
+  )
+```
+
+
+
+```{r renv-tar-make, eval = FALSE}
+# Install renv if needed
+if (!require("renv")) install.packages("renv")
+# Retrieve the packages used in the analysis
+renv::restore()
+# Trigger the targets pipeline
+targets::tar_make()
+```
+
+```{r}
+library(tidyverse)
+library(NlsyLinks)
+library(discord)
+library(gtsummary)
+library(broom)
+library(broom.helpers)
+library(janitor)
+#' Reverse Code Survey Items
+#'
+#' @description From https://github.com/svmiller/stevemisc/blob/master/R/revcode.R
+#' @param x A vector of survey items
+reverse_code <- function(x) {
+  len <- length(na.omit(unique(x)))+1
+  return((x*-1) + len)
+}
+
+# Set the url for neuroticism data
+neuroticism_data_url <- "https://raw.githubusercontent.com/R-Computing-Lab/target-causalclaims/main/data/neuroticism.csv"
+
+# Read in the raw data
+processed_neuroticism_data <- read_csv(
+  neuroticism_data_url
+) %>%
+  # Select the variables, renaming them according to the fields from NLSY
+  select(
+    case_id = R0000100,
+    sample_id = R0173600,
+    race = R0214700,
+    sex = R0214800,
+    depression = H0013301, # H0013301 is depression at age 50
+    anxious_upset = T4998603,
+    calm_stable = T4998608
+    ) %>%
+  # Filter the data frame so we only have values greater than zero in the columns 'depression_score', 'anxious_upset', and 'calm_stable'
+    filter(
+      if_all(
+        .cols = c(depression, anxious_upset, calm_stable), 
+        function(value) value >= 0)
+      ) %>%
+  # Define neuroticism and scale relevant measures
+    mutate(
+      depression = scale(depression)[,1],
+      # Reverse Coding calm/stable measurement from TIPI and adding with
+      # anxious/upset
+      neuroticism = scale(
+        reverse_code(calm_stable) + anxious_upset
+        )[,1]
+      ) 
+
+
+single_entered_neuroticism <- processed_neuroticism_data %>%
+  mutate(
+    SubjectTag = case_id * 100
+    ) %>%
+    CreatePairLinksSingleEntered(
+      # Get familial links from the NLSY79 dataset for full siblings
+      linksPairDataset = Links79PairExpanded %>%
+        filter(
+          RelationshipPath == "Gen1Housemates" & RFull == 0.5
+          ),
+      linksNames = c(
+        "ExtendedID",
+        "R", 
+        "RelationshipPath"
+        ),
+      outcomeNames = c(
+        "depression", 
+        "neuroticism",
+        "sex", 
+        "race"
+        ),
+      subject1Qualifier = "_s1",
+      subject2Qualifier = "_s2"
+      ) %>%
+    # NAs in outcome variable cannot be present for discordant regression to work
+    drop_na(
+      contains("depression")
+      ) %>%
+    as_tibble() %>%
+    rename(
+      subject_tag_s1 = SubjectTag_S1,
+      subject_tag_s2 = SubjectTag_S2,
+      extended_id = ExtendedID,
+      relationship_path = RelationshipPath
+    )  %>%
+  mutate(id = row_number())
+```
+
+
+# Depression and Neuroticism
+
+```{r}
+library(grid)
+library(gridExtra)
+
+z_cut <- .5
+
+df_link <- single_entered_neuroticism
+
+consistent_kin <- df_link %>%
+  group_by(subject_tag_s1, subject_tag_s2) %>%
+  count(
+    depression_s1, neuroticism_s1,
+    depression_s2, neuroticism_s2) %>%
+  na.omit()
+
+# Create the dep_modeling_data object with only consistent responders.
+# Clean the column names with the {janitor} package.
+dep_modeling_data <- semi_join(df_link,
+  consistent_kin,
+  by = c(
+    "subject_tag_s1",
+    "subject_tag_s2"
+  )
+) %>%
+  clean_names()
+
+discord_dep <- discord_data(
+        data = single_entered_neuroticism,
+        outcome = "depression",
+        predictors = "neuroticism",
+        sex = "sex",
+        race = "race",
+        pair_identifiers = c("_s1", "_s2"),
+        id = "id"
+      ) %>%
+  filter(!is.na(neuroticism_mean), !is.na(depression_mean)) %>%
+  mutate(
+    # # Classify Difference Grouping
+    neuroticism_diff_group = factor(
+      case_when(
+        scale(neuroticism_diff) > z_cut  ~ "More N",
+        scale(neuroticism_diff) < -z_cut  ~ "Less N",
+        abs(scale(neuroticism_diff)) <= z_cut  ~ "Equally N"
+      ),
+      levels = c(
+        "Less N",
+        "Equally N",
+        "More N"
+      )
+    )
+  )
+
+```
+
+
+```{r}
+
+# Create a color palette for the shading
+shading <- c("firebrick4", "firebrick1", "dodgerblue1", "dodgerblue4")
+max_val <- max(abs(discord_dep$neuroticism_diff), na.rm = TRUE)
+values <- seq(-max_val, max_val, length = length(shading))
+```
+
+
+```{r individual, echo=TRUE, message=FALSE}
+# Individual level plot
+individual_plot <- ggplot(dep_modeling_data, aes(
+  x = neuroticism_s1,
+  y = depression_s1,
+  color = neuroticism_s1 - neuroticism_s2
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(width = 0.1, height = 0.1)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  # added sibling 2 to the plot
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(w = 0.1, h = 0.1),
+    aes(
+      x = neuroticism_s2,
+      y = depression_s2,
+      color = neuroticism_s2 - neuroticism_s1
+    )
+  ) +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin Neuroticism",
+    colours = shading,
+    na.value = "#AD78B6",
+    values = scales::rescale(c(-max_val, max_val))
+  ) +
+  labs(
+    x = "Neuroticism Score",
+    y = "CES-D Depression Score"
+  ) +
+  theme_minimal() #+
+#  theme(legend.position = "none")
+
+individual_plot +
+  ggtitle("Individual Level Plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Between Family Plots
+
+
+
+```{r scatter, message=FALSE, include=FALSE, echo=TRUE}
+# Main scatter plot
+main_plot <- ggplot(discord_dep, aes(
+  x = neuroticism_mean,
+  y = depression_mean, colour = neuroticism_diff
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(width = 0.1, height = 0.1)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin Neuroticism",
+    colours = shading,
+    na.value = "#AD78B6"#,
+   # values = scales::rescale(c(
+   #   min(discord_dep$neuroticism_diff, na.rm = TRUE),
+   #   mean(discord_dep$neuroticism_diff, na.rm = TRUE),
+   #   max(discord_dep$neuroticism_diff, na.rm = TRUE)
+   # ))
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(x = "Mean Neuroticism", y = "Mean CES-D Depression Score")
+```
+
+```{r echo=FALSE, message=FALSE}
+main_plot
+```
+
+
+```{r plot-raw-data, message=FALSE}
+# Marginal X density (SES mean)
+xdensity <- ggplot(discord_dep, aes(x = neuroticism_mean, group = neuroticism_diff_group, color = neuroticism_diff_group)) +
+  geom_density(adjust = 2, linewidth = 1, fill = NA) +
+  scale_colour_manual(
+    name = "Sibling\nDifferences\nin Neuroticism",
+    values = c("firebrick1", "#AD78B6", "dodgerblue1")
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "left",
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    legend.title = element_text(size = 8),
+    legend.text = element_text(size = 6)
+  ) +
+  labs(x = NULL, y = NULL)
+
+# Marginal Y density
+ydensity <- ggplot(discord_dep, aes(x = depression_mean, group = neuroticism_diff_group, color = neuroticism_diff_group)) +
+  geom_density(adjust = 2, linewidth = 1, fill = NA) +
+  scale_colour_manual(
+    values = c("firebrick1", "#AD78B6", "dodgerblue1")
+  ) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  labs(x = NULL, y = NULL)
+```
+
+
+```{r echo=FALSE, message=FALSE}
+# add titles
+xdensity + theme_bw() + theme(
+  plot.title = element_text(hjust = 0.5, size = 12),
+  axis.title.x = element_text(size = 12)
+) + labs(title = "Mean Neuroticism")
+
+ydensity + theme_bw() + theme(
+  plot.title = element_text(hjust = 0.5, size = 12),
+  axis.title.x = element_text(size = 12)
+) + labs(title = "Mean Depression")
+```
+
+```{r}
+# Blank placeholder plot
+blankPlot <- ggplot() +
+  theme_void()
+
+# Final layout (true layout you originally had: AB above CC)
+grid.arrange(
+  arrangeGrob(xdensity, blankPlot, ncol = 2, widths = c(4, 1)),
+  arrangeGrob(main_plot, ydensity, ncol = 2, widths = c(4, 1)),
+  heights = c(1.5, 4),
+  top = textGrob("Sibling Differences in Depression and Neuroticism",
+    gp = gpar(fontsize = 20, font = 3)
+  )
+)
+```
+
+
+
+```{r echo=FALSE, message=FALSE}
+main_plot + facet_wrap(~neuroticism_diff_group, ncol = 1) +
+  theme(legend.position = "none") +
+  labs(title = "Within Family Differences in Depression and Neuroticism")
+```
+
+
+```{r plot-within-family, echo=TRUE, message=FALSE}
+# Within Family
+## Setup: Use discord_data
+
+# Main scatter plot
+main_plot_within <- ggplot(discord_dep, aes(
+  x = neuroticism_diff,
+  y = depression_diff, colour = neuroticism_diff
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(w = 0.2, h = 0.2)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin neuroticism",
+    colours = shading,
+    na.value = "#AD78B6",
+    values = scales::rescale(c(
+      min(discord_dep$neuroticism_diff, na.rm = TRUE),
+      mean(discord_dep$neuroticism_diff, na.rm = TRUE),
+      max(discord_dep$neuroticism_diff, na.rm = TRUE)
+    ))
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(x = "Diff Neuroticism", y = "Diff Depression")
+```
+
+
+```{r echo=TRUE, message=FALSE}
+main_plot_within + facet_wrap(~neuroticism_diff_group, ncol = 1) +
+  theme(legend.position = "bottom") +
+  labs(title = "Within Family Differences in Depression and Neuroticism")
+```
+
+
+# 
+
+
+# Depression and Conscientiousness
+
+```{r}
+tar_load("processed_consc_depression_income")
+```
+```{r}
+
+# partially out covariates
+    model_dep_tnfi <- lm(depression ~ tnfi_at_age_50, data = processed_consc_depression_income)
+    
+processed_consc_depression_income$depression_partialed[!is.na(processed_consc_depression_income$depression)&!is.na(processed_consc_depression_income$tnfi_at_age_50)] <-  residuals(model_dep_tnfi)
+
+    model_con_tnfi <- lm(conscientiousness ~ tnfi_at_age_50, data = processed_consc_depression_income)
+    
+processed_consc_depression_income$conscientiousness_partialed[!is.na(processed_consc_depression_income$conscientiousness)&!is.na(processed_consc_depression_income$tnfi_at_age_50)] <- residuals(model_con_tnfi)
+
+single_entered_conscientiousness_income <- processed_consc_depression_income %>%
+  mutate(
+    SubjectTag = case_id * 100
+    ) %>%
+    CreatePairLinksSingleEntered(
+      # Get familial links from the NLSY79 dataset for full siblings
+      linksPairDataset = Links79PairExpanded %>%
+        filter(
+          RelationshipPath == "Gen1Housemates" & RFull == 0.5
+          ),
+      linksNames = c(
+        "ExtendedID",
+        "R", 
+        "RelationshipPath"
+        ),
+      outcomeNames = c(
+        "depression", 
+        "conscientiousness",
+        "conscientiousness_partialed",
+        "depression_partialed",
+        "sex", 
+        "race"
+        ),
+      subject1Qualifier = "_s1",
+      subject2Qualifier = "_s2"
+      ) %>%
+    # NAs in outcome variable cannot be present for discordant regression to work
+    drop_na(
+      contains("depression")
+      ) %>%
+    as_tibble() %>%
+    rename(
+      subject_tag_s1 = SubjectTag_S1,
+      subject_tag_s2 = SubjectTag_S2,
+      extended_id = ExtendedID,
+      xconscientiousness_s1 = conscientiousness_s1,
+      xconscientiousness_s2 = conscientiousness_s2,
+      relationship_path = RelationshipPath
+    )  %>%
+  mutate(id = row_number()) %>%
+  rename(
+    conscientiousness_s1 = conscientiousness_partialed_s1,
+    conscientiousness_s2 = conscientiousness_partialed_s2
+  )
+
+
+```
+
+```{r}
+df_link <- single_entered_conscientiousness_income 
+
+consistent_kin <- df_link %>%
+  group_by(subject_tag_s1, subject_tag_s2) %>%
+  count(
+    depression_s1, conscientiousness_s1,
+    depression_s2, conscientiousness_s2) %>%
+  na.omit()
+
+# Create the dep_modeling_data object with only consistent responders.
+# Clean the column names with the {janitor} package.
+depincome_modeling_data <- semi_join(df_link,
+  consistent_kin,
+  by = c(
+    "subject_tag_s1",
+    "subject_tag_s2"
+  )
+) %>%
+  clean_names()
+
+discord_depincome <- discord_data(
+        data = single_entered_conscientiousness_income ,
+        outcome = "depression",
+        predictors = c("conscientiousness"),
+        sex = "sex",
+        race = "race",
+        pair_identifiers = c("_s1", "_s2"),
+        id = "id"
+      ) %>%
+  filter(!is.na(conscientiousness_mean), !is.na(depression_mean)) %>%
+  mutate(
+    # # Classify Difference Grouping
+    conscientiousness_diff_group = factor(
+      case_when(
+        scale(conscientiousness_diff) > z_cut  ~ "More C",
+        scale(conscientiousness_diff) < -z_cut  ~ "Less C",
+        abs(scale(conscientiousness_diff)) <= z_cut  ~ "Equally C"
+      ),
+      levels = c(
+        "Less C",
+        "Equally C",
+        "More C"
+      )
+    )
+  )
+
+```
+
+
+```{r}
+# Create a color palette for the shading
+shading <- c("firebrick4", "firebrick1", "dodgerblue1", "dodgerblue4")
+max_val <- max(abs(discord_depincome$conscientiousness_diff), na.rm = TRUE)
+values <- seq(-max_val, max_val, length = length(shading))
+```
+
+
+```{r individual, echo=TRUE, message=FALSE}
+# Individual level plot
+
+individual_plot <- ggplot(depincome_modeling_data, aes(
+  x = conscientiousness_s1,
+  y = depression_s1,
+  color = conscientiousness_s1 - conscientiousness_s2
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(width = 0.1, height = 0.1)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  # added sibling 2 to the plot
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(w = 0.1, h = 0.1),
+    aes(
+      x = conscientiousness_s2,
+      y = depression_s2,
+      color = conscientiousness_s2 - conscientiousness_s1
+    )
+  ) +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    colours = shading,
+    na.value = "#AD78B6",
+    values = scales::rescale(c(-max_val, max_val))
+  ) +
+  labs(
+    x = "conscientiousness Score",
+    y = "depression Score"
+  ) +
+  theme_minimal() #+
+#  theme(legend.position = "none")
+
+individual_plot +
+  ggtitle("Individual Level Plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r scatter, message=FALSE, include=FALSE, echo=TRUE}
+# Main scatter plot
+
+main_plot <- ggplot(discord_depincome, aes(
+  x = conscientiousness_mean,
+  y = depression_mean, colour = conscientiousness_diff
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(width = 0.1, height = 0.1)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    colours = shading,
+    na.value = "#AD78B6"#,
+   # values = scales::rescale(c(
+   #   min(discord_dep$conscientiousness_diff, na.rm = TRUE),
+   #   mean(discord_dep$conscientiousness_diff, na.rm = TRUE),
+   #   max(discord_dep$conscientiousness_diff, na.rm = TRUE)
+   # ))
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(x = "Mean conscientiousness", y = "Mean depression")
+```
+
+```{r echo=FALSE, message=FALSE}
+main_plot
+
+```
+
+
+```{r plot-raw-data, message=FALSE}
+# Marginal X density (SES mean)
+
+xdensity <- ggplot(discord_depincome, aes(x = conscientiousness_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
+  geom_density(adjust = 2, linewidth = 1, fill = NA) +
+  scale_colour_manual(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    values = c("firebrick1", "#AD78B6", "dodgerblue1")
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "left",
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    legend.title = element_text(size = 8),
+    legend.text = element_text(size = 6)
+  ) +
+  labs(x = NULL, y = NULL)
+
+# Marginal Y density
+ydensity <- ggplot(discord_depincome, aes(x = depression_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
+  geom_density(adjust = 2, linewidth = 1, fill = NA) +
+  scale_colour_manual(
+    values = c("firebrick1", "#AD78B6", "dodgerblue1")
+  ) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  labs(x = NULL, y = NULL)
+```
+
+
+```{r echo=FALSE, message=FALSE}
+# add titles
+xdensity + theme_bw() + theme(
+  plot.title = element_text(hjust = 0.5, size = 12),
+  axis.title.x = element_text(size = 12)
+) + labs(title = "Mean conscientiousness")
+
+
+ydensity + theme_bw() + theme(
+  plot.title = element_text(hjust = 0.5, size = 12),
+  axis.title.x = element_text(size = 12)
+) + labs(title = "Mean Health")
+```
+
+```{r}
+
+# Blank placeholder plot
+blankPlot <- ggplot() +
+  theme_void()
+
+# Final layout (true layout you originally had: AB above CC)
+grid.arrange(
+  arrangeGrob(xdensity, blankPlot, ncol = 2, widths = c(4, 1)),
+  arrangeGrob(main_plot, ydensity, ncol = 2, widths = c(4, 1)),
+  heights = c(1.5, 4),
+  top = textGrob("Sibling Differences in Depression and conscientiousness",
+    gp = gpar(fontsize = 20, font = 3)
+  )
+)
+```
+
+
+
+```{r echo=FALSE, message=FALSE}
+
+main_plot + facet_wrap(~conscientiousness_diff_group, ncol = 1) +
+  theme(legend.position = "none") +
+  labs(title = "Within Family Differences in Depression and conscientiousness")
+
+# Within Family
+## Setup: Use discord_data
+
+# Main scatter plot
+main_plot_within <- ggplot(discord_depincome, aes(
+  x = conscientiousness_diff,
+  y = depression_diff, colour = conscientiousness_diff
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(w = 0.2, h = 0.2)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    colours = shading,
+    na.value = "#AD78B6",
+    values = scales::rescale(c(
+      min(discord_depincome$conscientiousness_diff, na.rm = TRUE),
+      mean(discord_depincome$conscientiousness_diff, na.rm = TRUE),
+      max(discord_depincome$conscientiousness_diff, na.rm = TRUE)
+    ))
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(x = "Diff conscientiousness", y = "Diff Health")
+
+main_plot_within
+```
+
+
+```{r echo=TRUE, message=FALSE}
+
+main_plot_within + facet_wrap(~conscientiousness_diff_group, ncol = 1) +
+  theme(legend.position = "bottom") +
+  labs(title = "Within Family Differences in Depression and conscientiousness")
+```
+
+# Health and Conscientiousness
+
+```{r}
+tar_load("processed_phys_consc")
+```
+```{r}
+
+
+
+single_entered_conscientiousness <- processed_phys_consc %>%
+  mutate(
+    SubjectTag = case_id * 100
+    ) %>%
+    CreatePairLinksSingleEntered(
+      # Get familial links from the NLSY79 dataset for full siblings
+      linksPairDataset = Links79PairExpanded %>%
+        filter(
+          RelationshipPath == "Gen1Housemates" & RFull == 0.5
+          ),
+      linksNames = c(
+        "ExtendedID",
+        "R", 
+        "RelationshipPath"
+        ),
+      outcomeNames = c(
+        "age_50_physical_health", 
+        "conscientiousness",
+        "sex", 
+        "race"
+        ),
+      subject1Qualifier = "_s1",
+      subject2Qualifier = "_s2"
+      ) %>%
+    # NAs in outcome variable cannot be present for discordant regression to work
+    drop_na(
+      contains("age_50_physical_health")
+      ) %>%
+    as_tibble() %>%
+    rename(
+      subject_tag_s1 = SubjectTag_S1,
+      subject_tag_s2 = SubjectTag_S2,
+      extended_id = ExtendedID,
+      relationship_path = RelationshipPath
+    )  %>%
+  mutate(id = row_number())
+
+
+```
+
+```{r}
+df_link <- single_entered_conscientiousness
+
+consistent_kin <- df_link %>%
+  group_by(subject_tag_s1, subject_tag_s2) %>%
+  count(
+    age_50_physical_health_s1, conscientiousness_s1,
+    age_50_physical_health_s2, conscientiousness_s2) %>%
+  na.omit()
+
+# Create the dep_modeling_data object with only consistent responders.
+# Clean the column names with the {janitor} package.
+h50_modeling_data <- semi_join(df_link,
+  consistent_kin,
+  by = c(
+    "subject_tag_s1",
+    "subject_tag_s2"
+  )
+) %>%
+  clean_names()
+
+discord_h50 <- discord_data(
+        data = single_entered_conscientiousness,
+        outcome = "age_50_physical_health",
+        predictors = "conscientiousness",
+        sex = "sex",
+        race = "race",
+        pair_identifiers = c("_s1", "_s2"),
+        id = "id"
+      ) %>%
+  filter(!is.na(conscientiousness_mean), !is.na(age_50_physical_health_mean)) %>%
+  mutate(
+    # # Classify Difference Grouping
+    conscientiousness_diff_group = factor(
+      case_when(
+        scale(conscientiousness_diff) > z_cut  ~ "More C",
+        scale(conscientiousness_diff) < -z_cut  ~ "Less C",
+        abs(scale(conscientiousness_diff)) <= z_cut  ~ "Equally C"
+      ),
+      levels = c(
+        "Less C",
+        "Equally C",
+        "More C"
+      )
+    )
+  )
+
+```
+
+
+```{r}
+# Create a color palette for the shading
+shading <- c("firebrick4", "firebrick1", "dodgerblue1", "dodgerblue4")
+max_val <- max(abs(discord_h50$conscientiousness_diff), na.rm = TRUE)
+values <- seq(-max_val, max_val, length = length(shading))
+```
+
+
+```{r individual, echo=TRUE, message=FALSE}
+# Individual level plot
+
+individual_plot <- ggplot(h50_modeling_data, aes(
+  x = conscientiousness_s1,
+  y = age_50_physical_health_s1,
+  color = conscientiousness_s1 - conscientiousness_s2
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(width = 0.1, height = 0.1)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  # added sibling 2 to the plot
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(w = 0.1, h = 0.1),
+    aes(
+      x = conscientiousness_s2,
+      y = age_50_physical_health_s2,
+      color = conscientiousness_s2 - conscientiousness_s1
+    )
+  ) +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    colours = shading,
+    na.value = "#AD78B6",
+    values = scales::rescale(c(-max_val, max_val))
+  ) +
+  labs(
+    x = "conscientiousness Score",
+    y = "age_50_physical_health Score"
+  ) +
+  theme_minimal() #+
+#  theme(legend.position = "none")
+
+individual_plot +
+  ggtitle("Individual Level Plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r scatter, message=FALSE, include=FALSE, echo=TRUE}
+# Main scatter plot
+
+main_plot <- ggplot(discord_h50, aes(
+  x = conscientiousness_mean,
+  y = age_50_physical_health_mean, colour = conscientiousness_diff
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(width = 0.1, height = 0.1)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    colours = shading,
+    na.value = "#AD78B6"#,
+   # values = scales::rescale(c(
+   #   min(discord_dep$conscientiousness_diff, na.rm = TRUE),
+   #   mean(discord_dep$conscientiousness_diff, na.rm = TRUE),
+   #   max(discord_dep$conscientiousness_diff, na.rm = TRUE)
+   # ))
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(x = "Mean conscientiousness", y = "Mean age_50_physical_health")
+```
+
+```{r echo=FALSE, message=FALSE}
+main_plot
+
+```
+
+
+```{r plot-raw-data, message=FALSE}
+# Marginal X density (SES mean)
+
+xdensity <- ggplot(discord_h50, aes(x = conscientiousness_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
+  geom_density(adjust = 2, linewidth = 1, fill = NA) +
+  scale_colour_manual(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    values = c("firebrick1", "#AD78B6", "dodgerblue1")
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "left",
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    legend.title = element_text(size = 8),
+    legend.text = element_text(size = 6)
+  ) +
+  labs(x = NULL, y = NULL)
+
+# Marginal Y density
+ydensity <- ggplot(discord_h50, aes(x = age_50_physical_health_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
+  geom_density(adjust = 2, linewidth = 1, fill = NA) +
+  scale_colour_manual(
+    values = c("firebrick1", "#AD78B6", "dodgerblue1")
+  ) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  labs(x = NULL, y = NULL)
+```
+
+
+```{r echo=FALSE, message=FALSE}
+# add titles
+xdensity + theme_bw() + theme(
+  plot.title = element_text(hjust = 0.5, size = 12),
+  axis.title.x = element_text(size = 12)
+) + labs(title = "Mean conscientiousness")
+
+
+ydensity + theme_bw() + theme(
+  plot.title = element_text(hjust = 0.5, size = 12),
+  axis.title.x = element_text(size = 12)
+) + labs(title = "Mean Health")
+```
+
+```{r}
+
+# Blank placeholder plot
+blankPlot <- ggplot() +
+  theme_void()
+
+# Final layout (true layout you originally had: AB above CC)
+grid.arrange(
+  arrangeGrob(xdensity, blankPlot, ncol = 2, widths = c(4, 1)),
+  arrangeGrob(main_plot, ydensity, ncol = 2, widths = c(4, 1)),
+  heights = c(1.5, 4),
+  top = textGrob("Sibling Differences in h50 and conscientiousness",
+    gp = gpar(fontsize = 20, font = 3)
+  )
+)
+```
+
+
+
+```{r echo=FALSE, message=FALSE}
+
+main_plot + facet_wrap(~conscientiousness_diff_group, ncol = 1) +
+  theme(legend.position = "none") +
+  labs(title = "Within Family Differences in Depression and conscientiousness")
+
+# Within Family
+## Setup: Use discord_data
+
+# Main scatter plot
+main_plot_within <- ggplot(discord_h50, aes(
+  x = conscientiousness_diff,
+  y = age_50_physical_health_diff, colour = conscientiousness_diff
+)) +
+  geom_point(
+    size = 0.8, alpha = 0.8, na.rm = TRUE,
+    position = position_jitter(w = 0.2, h = 0.2)
+  ) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  scale_colour_gradientn(
+    name = "Sibling\nDifferences\nin conscientiousness",
+    colours = shading,
+    na.value = "#AD78B6",
+    values = scales::rescale(c(
+      min(discord_h50$conscientiousness_diff, na.rm = TRUE),
+      mean(discord_h50$conscientiousness_diff, na.rm = TRUE),
+      max(discord_h50$conscientiousness_diff, na.rm = TRUE)
+    ))
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(x = "Diff conscientiousness", y = "Diff Health")
+
+main_plot_within
+```
+
+
+```{r echo=TRUE, message=FALSE}
+
+main_plot_within + facet_wrap(~conscientiousness_diff_group, ncol = 1) +
+  theme(legend.position = "bottom") +
+  labs(title = "Within Family Differences in Depression and conscientiousness")
+```
+# Citations
