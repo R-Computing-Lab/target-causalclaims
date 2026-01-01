@@ -32,6 +32,7 @@ library(gtsummary)
 library(broom)
 library(broom.helpers)
 library(janitor)
+library(targets)
 #' Reverse Code Survey Items
 #'
 #' @description From https://github.com/svmiller/stevemisc/blob/master/R/revcode.R
@@ -120,7 +121,7 @@ single_entered_neuroticism <- processed_neuroticism_data %>%
 library(grid)
 library(gridExtra)
 
-z_cut <- .5
+z_cut <- .33
 
 df_link <- single_entered_neuroticism
 
@@ -315,7 +316,7 @@ grid.arrange(
   arrangeGrob(main_plot, ydensity, ncol = 2, widths = c(4, 1)),
   heights = c(1.5, 4),
   top = textGrob("Sibling Differences in Depression and Neuroticism",
-    gp = gpar(fontsize = 20, font = 3)
+    gp = gpar(fontsize = 10, font = 3)
   )
 )
 ```
@@ -360,13 +361,13 @@ main_plot_within <- ggplot(discord_dep, aes(
 
 
 ```{r echo=TRUE, message=FALSE}
+main_plot_within
+
 main_plot_within + facet_wrap(~neuroticism_diff_group, ncol = 1) +
   theme(legend.position = "bottom") +
   labs(title = "Within Family Differences in Depression and Neuroticism")
 ```
 
-
-# 
 
 
 # Depression and Conscientiousness
@@ -377,13 +378,13 @@ tar_load("processed_consc_depression_income")
 ```{r}
 
 # partially out covariates
-    model_dep_tnfi <- lm(depression ~ tnfi_at_age_50, data = processed_consc_depression_income)
+    model_dep_tnfi <- lm(depression ~ tnfi_at_age_50 + highest_grade_at_age_50 , data = processed_consc_depression_income)
     
-processed_consc_depression_income$depression_partialed[!is.na(processed_consc_depression_income$depression)&!is.na(processed_consc_depression_income$tnfi_at_age_50)] <-  residuals(model_dep_tnfi)
+processed_consc_depression_income$depression_partialed[!is.na(processed_consc_depression_income$depression)&!is.na(processed_consc_depression_income$tnfi_at_age_50)&!is.na(processed_consc_depression_income$highest_grade_at_age_50)] <-  residuals(model_dep_tnfi)
 
-    model_con_tnfi <- lm(conscientiousness ~ tnfi_at_age_50, data = processed_consc_depression_income)
+    model_con_tnfi <- lm(conscientiousness ~ tnfi_at_age_50+ highest_grade_at_age_50, data = processed_consc_depression_income)
     
-processed_consc_depression_income$conscientiousness_partialed[!is.na(processed_consc_depression_income$conscientiousness)&!is.na(processed_consc_depression_income$tnfi_at_age_50)] <- residuals(model_con_tnfi)
+processed_consc_depression_income$conscientiousness_partialed[!is.na(processed_consc_depression_income$conscientiousness)&!is.na(processed_consc_depression_income$tnfi_at_age_50)&!is.na(processed_consc_depression_income$highest_grade_at_age_50)] <- residuals(model_con_tnfi)
 
 single_entered_conscientiousness_income <- processed_consc_depression_income %>%
   mutate(
@@ -405,6 +406,8 @@ single_entered_conscientiousness_income <- processed_consc_depression_income %>%
         "conscientiousness",
         "conscientiousness_partialed",
         "depression_partialed",
+        "highest_grade_at_age_50",
+        "tnfi_at_age_50",
         "sex", 
         "race"
         ),
@@ -420,15 +423,19 @@ single_entered_conscientiousness_income <- processed_consc_depression_income %>%
       subject_tag_s1 = SubjectTag_S1,
       subject_tag_s2 = SubjectTag_S2,
       extended_id = ExtendedID,
-      xconscientiousness_s1 = conscientiousness_s1,
-      xconscientiousness_s2 = conscientiousness_s2,
+ #       xdepression_s1 = depression_s1,
+  #    xdepression_s2 = depression_s2,
+    #  xconscientiousness_s1 = conscientiousness_s1,
+     # xconscientiousness_s2 = conscientiousness_s2,
       relationship_path = RelationshipPath
     )  %>%
-  mutate(id = row_number()) %>%
-  rename(
-    conscientiousness_s1 = conscientiousness_partialed_s1,
-    conscientiousness_s2 = conscientiousness_partialed_s2
-  )
+  mutate(id = row_number()) #%>%
+#  rename(
+ # depression_s1 = depression_partialed_s1,
+ # depression_s2 = depression_partialed_s2,
+   # conscientiousness_s1 = conscientiousness_partialed_s1,
+   # conscientiousness_s2 = conscientiousness_partialed_s2
+#  )
 
 
 ```
@@ -457,7 +464,7 @@ depincome_modeling_data <- semi_join(df_link,
 discord_depincome <- discord_data(
         data = single_entered_conscientiousness_income ,
         outcome = "depression",
-        predictors = c("conscientiousness"),
+        predictors = c("conscientiousness","tnfi_at_age_50","highest_grade_at_age_50"),
         sex = "sex",
         race = "race",
         pair_identifiers = c("_s1", "_s2"),
@@ -479,6 +486,13 @@ discord_depincome <- discord_data(
       )
     )
   )
+    model_control_means <- lm(depression_mean ~ tnfi_at_age_50_mean + highest_grade_at_age_50_mean , data = discord_depincome)
+    
+discord_depincome$depression_mean_partialed[!is.na(discord_depincome$depression_mean)&!is.na(discord_depincome$tnfi_at_age_50_mean)&!is.na(discord_depincome$highest_grade_at_age_50_mean)] <-  residuals(model_control_means)
+
+model_control_diff <- lm(depression_diff ~ tnfi_at_age_50_diff + highest_grade_at_age_50_diff , data = discord_depincome)
+    
+discord_depincome$depression_diff_partialed[!is.na(discord_depincome$depression_diff)&!is.na(discord_depincome$tnfi_at_age_50_diff)&!is.na(discord_depincome$highest_grade_at_age_50_diff)] <-  residuals(model_control_diff)
 
 ```
 
@@ -538,7 +552,7 @@ individual_plot +
 
 main_plot <- ggplot(discord_depincome, aes(
   x = conscientiousness_mean,
-  y = depression_mean, colour = conscientiousness_diff
+  y = depression_mean_partialed, colour = conscientiousness_diff
 )) +
   geom_point(
     size = 0.8, alpha = 0.8, na.rm = TRUE,
@@ -586,7 +600,8 @@ xdensity <- ggplot(discord_depincome, aes(x = conscientiousness_mean, group = co
   labs(x = NULL, y = NULL)
 
 # Marginal Y density
-ydensity <- ggplot(discord_depincome, aes(x = depression_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
+ydensity <- ggplot(discord_depincome, aes(x = depression_mean, group = conscientiousness_diff_group, 
+                                          color = conscientiousness_diff_group)) +
   geom_density(adjust = 2, linewidth = 1, fill = NA) +
   scale_colour_manual(
     values = c("firebrick1", "#AD78B6", "dodgerblue1")
@@ -647,13 +662,13 @@ main_plot + facet_wrap(~conscientiousness_diff_group, ncol = 1) +
 # Main scatter plot
 main_plot_within <- ggplot(discord_depincome, aes(
   x = conscientiousness_diff,
-  y = depression_diff, colour = conscientiousness_diff
+  y = depression_diff_partialed, colour = conscientiousness_diff
 )) +
   geom_point(
     size = 0.8, alpha = 0.8, na.rm = TRUE,
     position = position_jitter(w = 0.2, h = 0.2)
   ) +
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  geom_smooth(method = "lm", se = T, color = "black") +
   scale_colour_gradientn(
     name = "Sibling\nDifferences\nin conscientiousness",
     colours = shading,
@@ -839,7 +854,8 @@ main_plot <- ggplot(discord_h50, aes(
     size = 0.8, alpha = 0.8, na.rm = TRUE,
     position = position_jitter(width = 0.1, height = 0.1)
   ) +
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE,
+              color = "black") +
   scale_colour_gradientn(
     name = "Sibling\nDifferences\nin conscientiousness",
     colours = shading,
@@ -948,7 +964,11 @@ main_plot_within <- ggplot(discord_h50, aes(
     size = 0.8, alpha = 0.8, na.rm = TRUE,
     position = position_jitter(w = 0.2, h = 0.2)
   ) +
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  # add regression line y = .05+ .02x
+  geom_ribbon(stat = "identity",aes(ymin = 0.921 - 0.015 * conscientiousness_diff - 0.01, ymax = 0.921 + 0.114 * conscientiousness_diff + 0.02), alpha = 0.3,color = "black",
+              linetype = 0
+              ) +
+      geom_abline(slope = 0.01, intercept = 0.921, color = "black", linetype = "dashed") +
   scale_colour_gradientn(
     name = "Sibling\nDifferences\nin conscientiousness",
     colours = shading,
