@@ -2,7 +2,7 @@
 title: "Supplemental Material Graphs"
 author: ""
 date: ""
-output: word_document
+output: html_document
 bibliography: supplemental_materials.bib
 ---
 
@@ -15,11 +15,11 @@ knitr::opts_chunk$set(
 
 
 
-```{r renv-tar-make, eval = FALSE}
+```{r renv-tar-make, eval = F}
 # Install renv if needed
 if (!require("renv")) install.packages("renv")
 # Retrieve the packages used in the analysis
-renv::restore()
+#renv::restore()
 # Trigger the targets pipeline
 targets::tar_make()
 ```
@@ -33,6 +33,8 @@ library(broom)
 library(broom.helpers)
 library(janitor)
 library(targets)
+library(ggExtra)
+
 #' Reverse Code Survey Items
 #'
 #' @description From https://github.com/svmiller/stevemisc/blob/master/R/revcode.R
@@ -226,7 +228,7 @@ individual_plot +
 
 
 
-```{r scatter, message=FALSE, include=FALSE, echo=TRUE}
+```{r scatter1, message=FALSE, include=FALSE, echo=TRUE}
 # Main scatter plot
 main_plot <- ggplot(discord_dep, aes(
   x = neuroticism_mean,
@@ -257,7 +259,7 @@ main_plot
 ```
 
 
-```{r plot-raw-data, message=FALSE}
+```{r plot-raw-data1, message=FALSE}
 # Marginal X density (SES mean)
 xdensity <- ggplot(discord_dep, aes(x = neuroticism_mean, group = neuroticism_diff_group, color = neuroticism_diff_group)) +
   geom_density(adjust = 2, linewidth = 1, fill = NA) +
@@ -366,6 +368,86 @@ main_plot_within
 main_plot_within + facet_wrap(~neuroticism_diff_group, ncol = 1) +
   theme(legend.position = "bottom") +
   labs(title = "Within Family Differences in Depression and Neuroticism")
+
+```
+
+```{r echo=TRUE, message=FALSE}
+max_val_scale <- 2#max(abs(discord_dep$neuroticism_diff), na.rm = TRUE)
+# Create a color palette for the shading
+color_shading_4 <- c("firebrick4", "firebrick1", "dodgerblue1", "dodgerblue4")
+color_na <- "#AD78B6" # purple for missing values
+
+color_shading_3 <- c(color_shading_4[2], color_na, color_shading_4[3])
+# Main scatter plot
+plot_within <- ggplot(discord_dep, aes(
+  x = neuroticism_diff,
+  y = depression_diff,
+  color = neuroticism_diff_group
+)) +
+  geom_point( # this layer creates invisible points to all the marginal plots to align correctly
+    size = 1.8, alpha = 0.0, na.rm = TRUE,
+    shape = 21,
+    position = position_jitter(width = 0.2, height = 0.2, seed = 1234)
+  ) +
+  geom_point(
+    size = 1.8, alpha = 0.95, na.rm = TRUE,
+    shape = 21,
+    aes(
+      fill = neuroticism_diff,
+      colour = neuroticism_diff_group
+    ),
+    group = 1,
+    stroke = .001,
+    position = position_jitter(width = 0.2, height = 0.2, seed = 1234)
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    color = "black"
+  ) +
+  scale_fill_gradientn(
+    name = "Sibling\nDifferences\nin Neuroticism",
+    colours = color_shading_4,
+     na.value = "#AD78B6",
+   #  rescaler = ~ scales::rescale_mid(.x, mid = 0)
+    values = scales::rescale(c(
+      -max_val_scale,
+      -1,
+      0,
+      1,
+      max_val_scale
+    ))
+  ) +
+  scale_color_manual(
+    values = color_shading_3,
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left") +
+  labs(
+    x = "Differences in Neuroticism",
+    y = "Differences in Depression"
+  )
+
+#plot_within
+```
+```{r echo=TRUE, message=FALSE}
+ggMarginal(plot_within, type = "boxplot", xparams = list(stat = "boxplot",notch = T), 
+           outliers =FALSE,#type = "density", 
+           size = 10, groupColour = T, groupFill = F, #margin = "y",
+           aes(
+  color = neuroticism_diff_group,
+  fill = neuroticism_diff_group,
+  alpha = 0.95
+))
+ggMarginal(plot_within, type = "density",  margin = "x",
+           size = 10, groupColour = F, groupFill = T, aes(
+  color = neuroticism_diff_group,
+  fill = neuroticism_diff_group,
+  alpha = 0.95
+))
+
+
+
 ```
 
 
@@ -505,7 +587,7 @@ values <- seq(-max_val, max_val, length = length(shading))
 ```
 
 
-```{r individual, echo=TRUE, message=FALSE}
+```{r individual2, echo=TRUE, message=FALSE}
 # Individual level plot
 
 individual_plot <- ggplot(depincome_modeling_data, aes(
@@ -547,7 +629,7 @@ individual_plot +
 ```
 
 
-```{r scatter, message=FALSE, include=FALSE, echo=TRUE}
+```{r scatter2, message=FALSE, include=FALSE, echo=TRUE}
 # Main scatter plot
 
 main_plot <- ggplot(discord_depincome, aes(
@@ -580,7 +662,7 @@ main_plot
 ```
 
 
-```{r plot-raw-data, message=FALSE}
+```{r plot-raw-data2, message=FALSE}
 # Marginal X density (SES mean)
 
 xdensity <- ggplot(discord_depincome, aes(x = conscientiousness_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
@@ -801,7 +883,7 @@ values <- seq(-max_val, max_val, length = length(shading))
 ```
 
 
-```{r individual, echo=TRUE, message=FALSE}
+```{r individual3, echo=TRUE, message=FALSE}
 # Individual level plot
 
 individual_plot <- ggplot(h50_modeling_data, aes(
@@ -843,7 +925,7 @@ individual_plot +
 ```
 
 
-```{r scatter, message=FALSE, include=FALSE, echo=TRUE}
+```{r scatter3, message=FALSE, include=FALSE, echo=TRUE}
 # Main scatter plot
 
 main_plot <- ggplot(discord_h50, aes(
@@ -877,7 +959,7 @@ main_plot
 ```
 
 
-```{r plot-raw-data, message=FALSE}
+```{r plot-raw-data3, message=FALSE}
 # Marginal X density (SES mean)
 
 xdensity <- ggplot(discord_h50, aes(x = conscientiousness_mean, group = conscientiousness_diff_group, color = conscientiousness_diff_group)) +
