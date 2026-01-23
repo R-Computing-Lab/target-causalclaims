@@ -7,3 +7,4 @@ library
 output/~$tables.docx
 *.log
 *.pdf
+reports/supplemental_materials_updated.Rmd
